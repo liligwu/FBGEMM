@@ -144,9 +144,9 @@ def construct_cache_state(
     _cache_hash_size_cumsum = [0]
     total_cache_hash_size = 0
     for (num_embeddings, location) in zip(row_list, location_list):
-        if location == EmbeddingLocation.MANAGED_CACHING:
+        if location == EmbeddingLocation.MANAGED_CACHING:    # False
             total_cache_hash_size += num_embeddings
-        _cache_hash_size_cumsum.append(total_cache_hash_size)
+        _cache_hash_size_cumsum.append(total_cache_hash_size)  # [0, 0, 0]
     # [T], -1: non-cached table
     cache_hash_size_cumsum = []
     # [total_cache_hash_size], linear cache index -> table index
@@ -161,9 +161,9 @@ def construct_cache_state(
             cache_hash_size_cumsum.append(-1)
     cache_hash_size_cumsum.append(total_cache_hash_size)
     s = CacheState(
-        cache_hash_size_cumsum=cache_hash_size_cumsum,
-        cache_index_table_map=cache_index_table_map,
-        total_cache_hash_size=total_cache_hash_size,
+        cache_hash_size_cumsum=cache_hash_size_cumsum,  # [-1, -1, 0]
+        cache_index_table_map=cache_index_table_map,    # []
+        total_cache_hash_size=total_cache_hash_size,    # 0
     )
     return s
 
@@ -232,9 +232,9 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
         self.dummy_tensor: Tensor = torch.zeros(0, device=device)
 
         self.embedding_specs = embedding_specs
-        (rows, dims, locations, compute_devices) = zip(*embedding_specs)
-        T_ = len(self.embedding_specs)
-        self.dims: List[int] = dims
+        (rows, dims, locations, compute_devices) = zip(*embedding_specs)   # rows [10000000, 10000000]  dims [192, 192]   locations (<EmbeddingLocation.DEVICE: 0>, <EmbeddingLocation.DEVICE: 0>) compute_devices (<ComputeDevice.CUDA: 1>, <ComputeDevice.CUDA: 1>)
+        T_ = len(self.embedding_specs)   # number of physical tables
+        self.dims: List[int] = dims   # [192, 192]
         assert T_ > 0
         # mixed D is not supported by no bag kernels
         mixed_D = False
@@ -281,7 +281,7 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
 
         self.feature_table_map: List[int] = (
             feature_table_map if feature_table_map is not None else list(range(T_))
-        )
+        )   # [0, 1]
         T = len(self.feature_table_map)
         assert T_ <= T
         table_has_feature = [False] * T_
@@ -289,8 +289,8 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
             table_has_feature[t] = True
         assert all(table_has_feature), "Each table must have at least one feature!"
 
-        D_offsets = [dims[t] for t in self.feature_table_map]
-        D_offsets = [0] + list(accumulate(D_offsets))
+        D_offsets = [dims[t] for t in self.feature_table_map]   # dimention offset? [192, 192]
+        D_offsets = [0] + list(accumulate(D_offsets))   # [0, 192, 384]
         self.total_D: int = D_offsets[-1]
         self.max_D: int = max(dims)
         cached_dims = [
@@ -305,16 +305,16 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
             torch.tensor(D_offsets, device=self.current_device, dtype=torch.int32),
         )
 
-        hash_size_cumsum = [0] + list(accumulate(rows))
+        hash_size_cumsum = [0] + list(accumulate(rows))  # [0, 10000000, 20000000]
         if hash_size_cumsum[-1] == 0:
             self.total_hash_size_bits: int = 0
         else:
-            self.total_hash_size_bits: int = int(log2(float(hash_size_cumsum[-1])) + 1)
+            self.total_hash_size_bits: int = int(log2(float(hash_size_cumsum[-1])) + 1)   # 25
         # The last element is to easily access # of rows of each table by
         # hash_size_cumsum[t + 1] - hash_size_cumsum[t]
         hash_size_cumsum = [hash_size_cumsum[t] for t in self.feature_table_map] + [
             hash_size_cumsum[-1]
-        ]
+        ]    # [0, 10000000, 20000000]
         self.register_buffer(
             "hash_size_cumsum",
             torch.tensor(
@@ -329,7 +329,7 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
                 device=self.current_device,
                 dtype=torch.int64,
             ),
-        )
+        )    # tensor([10000000, 10000000], device='cuda:0')
         self.register_buffer(
             "bounds_check_warning",
             torch.tensor([0], device=self.current_device, dtype=torch.int64),
@@ -340,10 +340,10 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
             rowwise=False,
             cacheable=True,
             precision=weights_precision,
-        )
-        table_embedding_dtype = weights_precision.as_dtype()
+        )    # SplitState(dev_size=3840000000=192x2x10000000, host_size=0, uvm_size=0, placements=[<EmbeddingLocation.DEVICE: 0>, <EmbeddingLocation.DEVICE: 0>], offsets=[0, 1920000000])
+        table_embedding_dtype = weights_precision.as_dtype()  # torch.float16
 
-        self._apply_split(
+        self._apply_split(    # allocate the weights based on the location and size (dev_size).
             weight_split,
             prefix="weights",
             # pyre-fixme[6]: For 3rd param expected `Type[Type[_dtype]]` but got
@@ -418,7 +418,7 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
                 persistent=False,
             )
         else:
-            self._apply_split(
+            self._apply_split(      # is this duplicated to line 346?
                 construct_split_state(
                     embedding_specs,
                     rowwise=optimizer
@@ -433,7 +433,7 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
                 # pyre-fixme[6]: Expected `Type[Type[torch._dtype]]` for 3rd param
                 #  but got `Type[torch.float32]`.
                 dtype=torch.float32,
-                enforce_hbm=enforce_hbm,
+                enforce_hbm=enforce_hbm,   # False
             )
         if optimizer in (
             OptimType.ADAM,
@@ -497,10 +497,10 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
                 persistent=False,
             )
 
-        cache_state = construct_cache_state(rows, locations, self.feature_table_map)
+        cache_state = construct_cache_state(rows, locations, self.feature_table_map)  # CacheState(cache_hash_size_cumsum=[-1, -1, 0], cache_index_table_map=[], total_cache_hash_size=0)
 
         # Add table-wise cache miss counter
-        if self.record_cache_metrics.record_tablewise_cache_miss:
+        if self.record_cache_metrics.record_tablewise_cache_miss:   # False
             num_tables = len(cache_state.cache_hash_size_cumsum) - 1
             self.register_buffer(
                 "table_wise_cache_miss",
@@ -1078,7 +1078,7 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
         enforce_hbm: bool = False,
     ) -> None:
         setattr(self, f"{prefix}_physical_placements", split.placements)
-        setattr(self, f"{prefix}_physical_offsets", split.offsets)
+        setattr(self, f"{prefix}_physical_offsets", split.offsets)    # split.offsets [0, 1920000000]
 
         offsets = [split.offsets[t] for t in self.feature_table_map]
         placements = [split.placements[t] for t in self.feature_table_map]
@@ -1094,8 +1094,8 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
             self.register_buffer(
                 f"{prefix}_dev",
                 # pyre-fixme[6]: Expected `Optional[Type[torch._dtype]]` for 3rd
-                #  param but got `Type[Type[torch._dtype]]`.
-                torch.zeros(split.dev_size, device=self.current_device, dtype=dtype),
+                #  param but got `Types[Type[torch._dtype]]`.
+                torch.zeros(split.dev_size, device=self.current_device, dtype=dtype),     # allocate the parametter with split.dev_sice 3840000000
             )
         else:
             self.register_buffer(
@@ -1171,22 +1171,22 @@ class SplitTableBatchedEmbeddingBagsCodegen(nn.Module):
 
     def _apply_cache_state(
         self,
-        cache_state: CacheState,
-        cache_algorithm: CacheAlgorithm,
-        cache_load_factor: float,
-        cache_sets: int,
-        cache_reserved_memory: float,
-        dtype: torch.dtype,
+        cache_state: CacheState,  # CacheState(cache_hash_size_cumsum=[-1, -1, 0], cache_index_table_map=[], total_cache_hash_size=0)
+        cache_algorithm: CacheAlgorithm,  # <CacheAlgorithm.LRU: 0>
+        cache_load_factor: float,  # 0.2
+        cache_sets: int,  # 0
+        cache_reserved_memory: float,  # 0.0
+        dtype: torch.dtype,   # torch.float32
     ) -> None:
         self.cache_algorithm = cache_algorithm
         self.timestep = 1
         self.timesteps_prefetched = []
 
-        self.max_prefetch_depth = MAX_PREFETCH_DEPTH
+        self.max_prefetch_depth = MAX_PREFETCH_DEPTH   # 100
         self.lxu_cache_locations_list = []
         self.lxu_cache_locations_empty = torch.empty(
             0, device=self.current_device, dtype=torch.int32
-        ).fill_(-1)
+        ).fill_(-1)   # tensor([], device='cuda:0', dtype=torch.int32)
 
         # NOTE: no cache for CPU mode!
         if cache_state.total_cache_hash_size == 0 or self.use_cpu:

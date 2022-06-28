@@ -113,14 +113,14 @@ def b_indices(
 
 def generate_requests(
     iters: int,
-    B: int,
+    B: int,   # sample of input, number of sentences
     T: int,
     L: int,
     E: int,
     # inter-batch indices reuse rate
     reuse: float = 0.0,
     # alpha <= 1.0: use uniform distribution
-    # alpha > 1.0: use zipf distribution
+    # alpha > 1.0: use zipf distribution  https://en.wikipedia.org/wiki/Zipf%27s_law
     alpha: float = 1.0,
     weights_precision: SparseType = SparseType.FP32,
     weighted: bool = False,
@@ -128,7 +128,7 @@ def generate_requests(
     # Comma-separated list of table numbers
     tables: Optional[str] = None,
 ) -> List[Tuple[torch.IntTensor, torch.IntTensor, Optional[Tensor]]]:
-    if requests_data_file is not None:
+    if requests_data_file is not None:   # data stored in a file
         indices_tensor, offsets_tensor, lengths_tensor = torch.load(requests_data_file)
 
         average_L = 0
@@ -196,8 +196,8 @@ def generate_requests(
     if alpha <= 1.0:
         all_indices = torch.randint(
             low=0,
-            high=E,
-            size=(iters, T, B, L),
+            high=E,  # total number of rows of each embedding table
+            size=(iters, T, B, L),    # iters x nTable x Batch size (num of sentences) x Length of sentences
             device=get_device(),
             dtype=torch.int32,
         )
@@ -205,28 +205,28 @@ def generate_requests(
         (all_indices, _) = torch.sort(all_indices)
         all_indices = all_indices.reshape(iters, T, B * L)
     else:
-        assert E >= L, "num-embeddings must be greater than equal to bag-size"
+        assert E >= L, "num-embeddings must be greater than equal to bag-size"  # the vacabulary should more than the length of a sentence
         # oversample and then remove duplicates to obtain sampling without
         # replacement
-        all_indices = (np.random.zipf(a=alpha, size=(iters, T, B, 3 * L)) - 1) % E
+        all_indices = (np.random.zipf(a=alpha, size=(iters, T, B, 3 * L)) - 1) % E   # shape(10, 2, 65536, 96) https://numpy.org/doc/stable/reference/random/generated/numpy.random.zipf.html#numpy-random-zipf  limit the range of the smaples [0, 999999], will this change the distribution since "% E"? (very unlikely if E is large enough)
         for index_tuple in itertools.product(range(iters), range(T), range(B)):
             # sample without replacement from
             # https://stats.stackexchange.com/questions/20590/how-do-i-sample-without-replacement-using-a-sampling-with-replacement-function
             r = set()
-            for x in all_indices[index_tuple]:
+            for x in all_indices[index_tuple]: # x in all_indices[0, 0, 0]
                 if x not in r:
                     r.add(x)
                     if len(r) == L:
                         break
-            assert (len(r)) == L, "too skewed distribution (alpha too big)"
-            all_indices[index_tuple][:L] = list(r)
+            assert (len(r)) == L, "too skewed distribution (alpha too big)"   # if all elements in the L dimention are in the few first ranked (most frequent) words.
+            all_indices[index_tuple][:L] = list(r)  # all_indices[0, 0, 0][:32] = [0, 1, 2, 3, 4, 6, 8, 9, 10, 395, 11, 19209, 13, 137, ...]
         # shuffle indices so we don't have unintended spatial locality
-        all_indices = torch.as_tensor(all_indices[:, :, :, :L])
-        rng = default_rng()
+        all_indices = torch.as_tensor(all_indices[:, :, :, :L])    # torch.Size([10, 2, 65536, 32])
+        rng = default_rng()   # new random generator https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.default_rng
         permutation = torch.as_tensor(
-            rng.choice(E, size=all_indices.max().item() + 1, replace=False)
-        )
-        all_indices = permutation.gather(0, all_indices.flatten())
+            rng.choice(E, size=all_indices.max().item() + 1, replace=False)   # all_indices.max() = 999999
+        )    # torch.Size([10000000])
+        all_indices = permutation.gather(0, all_indices.flatten())  # https://pytorch.org/docs/stable/generated/torch.gather.html#torch.gather
         all_indices = all_indices.to(get_device()).int().reshape(iters, T, B * L)
     for it in range(iters - 1):
         for t in range(T):
@@ -276,7 +276,9 @@ def benchmark_requests(
         else:
             it_time = time.time() - start_time
             times.append(it_time)
+    print("times = ", times)
     avg_time = sum(times) / len(requests)
+    print("avg_time = ", avg_time)
     median_time = statistics.median(times)
     return median_time if check_median else avg_time
 

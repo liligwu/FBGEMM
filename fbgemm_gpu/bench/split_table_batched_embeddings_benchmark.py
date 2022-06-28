@@ -98,12 +98,12 @@ def cli() -> None:
 @click.option("--requests_data_file", type=str, default=None)
 @click.option("--tables", type=str, default=None)
 def device(  # noqa C901
-    alpha: float,
+    alpha: float,   # this parameter is used in generate_requests that generates the input of the embedding, it's a parameter of Zipf distribution. https://numpy.org/doc/stable/reference/random/generated/numpy.random.zipf.html#numpy-random-zipf and https://en.wikipedia.org/wiki/Zipf%27s_law, where the "alpha" in numpy is "s" in wiki which represents the probability that how much the first ranked elements would sampled.
     bag_size: int,
     batch_size: int,
     embedding_dim: int,
     weights_precision: SparseType,
-    stoc: bool,
+    stoc: bool,   # stochastic rounding
     iters: int,
     managed: str,
     mixed: bool,
@@ -122,10 +122,10 @@ def device(  # noqa C901
 ) -> None:
     np.random.seed(42)
     torch.manual_seed(42)
-    B = batch_size
+    B = batch_size          #number of sentences of each batch
     D = embedding_dim
-    L = bag_size
-    E = num_embeddings
+    L = bag_size            #This have to match the average_L if the data is stored in a
+    E = num_embeddings      #total number of rows of the table
     T = num_tables
     if weighted_num_requires_grad:
         assert weighted_num_requires_grad <= T
@@ -148,7 +148,7 @@ def device(  # noqa C901
         ]
         D = np.average(Ds)
     else:
-        Ds = [D] * T
+        Ds = [D] * T    # embedding dim for each table
     optimizer = OptimType.EXACT_ROWWISE_ADAGRAD if row_wise else OptimType.EXACT_ADAGRAD
 
     if managed == "device":
@@ -175,8 +175,8 @@ def device(  # noqa C901
         emb = SplitTableBatchedEmbeddingBagsCodegen(
             [
                 (
-                    E,
-                    d,
+                    E,# total number of queries
+                    d,# embedding dim
                     managed_option,
                     ComputeDevice.CUDA
                     if torch.cuda.is_available()
@@ -207,18 +207,18 @@ def device(  # noqa C901
         f"Accessed weights per batch: {B * sum(Ds) * L * param_size_multiplier / 1.0e9: .2f} GB"
     )
 
-    requests = generate_requests(
-        iters,
-        B,
-        T,
-        L,
-        E,
-        reuse=reuse,
-        alpha=alpha,
-        weights_precision=weights_precision,
-        weighted=weighted,
-        requests_data_file=requests_data_file,
-        tables=tables,
+    requests = generate_requests(  # generate input data
+        iters,  # 10
+        B,  # 65536
+        T,  # 2
+        L,  # 32
+        E,  #10000000
+        reuse=reuse,   # 0.0
+        alpha=alpha,   #1.15 
+        weights_precision=weights_precision,  # fp16
+        weighted=weighted,   # False
+        requests_data_file=requests_data_file,   # None
+        tables=tables,    # None
     )
 
     # forward
