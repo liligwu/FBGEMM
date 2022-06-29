@@ -30,7 +30,7 @@ except Exception:
     )
 
 
-ASSOC: int = 32
+ASSOC: int = 32 if torch.version.hip is None else 64
 
 
 # pyre-ignore

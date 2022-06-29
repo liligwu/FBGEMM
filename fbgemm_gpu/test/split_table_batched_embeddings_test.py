@@ -1993,28 +1993,28 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
         )
 
     @given(
-        T=st.integers(min_value=1, max_value=5),
-        D=st.integers(min_value=2, max_value=128),
-        B=st.integers(min_value=1, max_value=128),
-        log_E=st.integers(min_value=3, max_value=5),
-        L=st.integers(min_value=0, max_value=20),
-        D_gradcheck=st.integers(min_value=1, max_value=2),
+        T=st.just(5), # st.integers(min_value=1, max_value=5),
+        D=st.just(7), # st.integers(min_value=2, max_value=128),
+        B=st.just(57), #st.integers(min_value=1, max_value=128),
+        log_E=st.just(5), #st.integers(min_value=3, max_value=5),
+        L=st.just(13), #st.integers(min_value=0, max_value=20),
+        D_gradcheck=st.just(2), #st.integers(min_value=1, max_value=2),
         weights_precision=st.just(SparseType.FP16),
-        stochastic_rounding=st.booleans(),
-        weighted=st.booleans(),
-        row_wise=st.booleans(),
-        mixed=st.booleans(),
-        use_cache=st.booleans(),
+        stochastic_rounding=st.just(False), #st.booleans(),
+        weighted=st.just(False), #st.booleans(),
+        row_wise=st.just(True), #st.booleans(),
+        mixed=st.just(False), #st.booleans(),
+        use_cache=st.just(False), #st.booleans(),
         cache_algorithm=st.sampled_from(
             split_table_batched_embeddings_ops.CacheAlgorithm
         ),
-        use_cpu=st.booleans()
+        use_cpu=st.just(False) #st.booleans()
         if (gpu_available and not TEST_WITH_ROCM)
         else st.just(False)
         if (gpu_available and TEST_WITH_ROCM)
         else st.just(True),
-        exact=st.booleans(),
-        output_dtype=st.sampled_from([SparseType.FP32, SparseType.FP16]),
+        exact=st.just(True), #st.booleans(),
+        output_dtype=st.just(SparseType.FP16), #st.sampled_from([SparseType.FP32, SparseType.FP16]),
     )
     @settings(
         verbosity=Verbosity.verbose,
