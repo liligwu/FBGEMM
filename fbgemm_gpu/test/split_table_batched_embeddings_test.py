@@ -122,13 +122,22 @@ def get_table_batched_offsets_from_dense(
     (T, B, L) = merged_indices.size()
     lengths = np.ones((T, B)) * L
     flat_lengths = lengths.flatten()
-    return (
-        to_device(merged_indices.contiguous().view(-1), use_cpu),
-        to_device(
-            torch.tensor(([0] + np.cumsum(flat_lengths).tolist())).long(),
+    a = to_device(merged_indices.contiguous().view(-1), use_cpu)
+    print("===============label 5")
+    print("use_cpu",use_cpu)
+    print("flat_lengths",flat_lengths)
+    print("np.cumsum(flat_lengths)", np.cumsum(flat_lengths))
+    print("np.cumsum(flat_lengths).tolist()", np.cumsum(flat_lengths).tolist())
+    print("([0] + np.cumsum(flat_lengths).tolist())", ([0.0] + np.cumsum(flat_lengths).tolist()))
+    print("torch.tensor(([0] + np.cumsum(flat_lengths).tolist()))", torch.tensor(([0] + np.cumsum(flat_lengths).tolist())))
+    c = torch.tensor(([0.0] + np.cumsum(flat_lengths).tolist())).long()
+    print(c.cuda())
+    b = to_device(
+            c,
             use_cpu,
-        ),
-    )
+        )
+    print("===============label 6")
+    return (a, b)
 
 
 def generate_requests(
@@ -1808,17 +1817,22 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
         x = torch.cat([x.view(1, B, L) for x in xs], dim=0)
         xw = torch.cat([xw.view(1, B, L) for xw in xws_acc_type], dim=0)
 
+        print("===============label 3")
+
         (indices, offsets) = get_table_batched_offsets_from_dense(x, use_cpu)
+        print("===============label 4")
         fc2 = (
             cc(indices, offsets)
             if not weighted
             else cc(indices, offsets, to_device(xw.contiguous().view(-1), use_cpu))
         )
+        print("===============label 7")
         if do_pooling:
             goc = torch.cat([go.view(B, -1) for go in gos], dim=1)
         else:
             goc = torch.cat(gos, dim=0).contiguous()
         fc2.backward(goc)
+        print("===============label 8")
         cc.flush()
         split_optimizer_states = [s for (s,) in cc.split_optimizer_states()]
         tolerance = (
@@ -1826,6 +1840,7 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
             if weights_precision == SparseType.FP32 and output_dtype == SparseType.FP32
             else 1.0e-2
         )
+        print("===============label 9")
         for t in range(T):
             ref_optimizer_state = bs[t].weight.grad.float().cpu().to_dense().pow(2)
             torch.testing.assert_close(
@@ -1834,6 +1849,7 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
                 atol=tolerance,
                 rtol=tolerance,
             )
+        print("==========first assert")
         for t in range(T):
             # optimizer_state = squares (no row-wise) or sum squares (row-wise)
             torch.testing.assert_close(
@@ -1911,6 +1927,7 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
         )
         y.sum().backward()
         indice_weight_grad_mask = per_sample_weights.grad.clone().cpu()
+        print("=================second assert")
         for t in range(T_):
             if feature_requires_grad[t]:
                 torch.testing.assert_close(
@@ -1925,27 +1942,27 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
 
     @given(
         T=st.integers(min_value=1, max_value=5),
-        D=st.integers(min_value=2, max_value=128),
-        B=st.integers(min_value=1, max_value=128),
-        log_E=st.integers(min_value=3, max_value=5),
-        L=st.integers(min_value=0, max_value=20),
-        D_gradcheck=st.integers(min_value=1, max_value=2),
+        D=st.just(61), #integers(min_value=2, max_value=128),
+        B=st.just(2), #integers(min_value=1, max_value=128),
+        log_E=st.just(4), #integers(min_value=3, max_value=5),
+        L=st.just(2), #integers(min_value=0, max_value=20),
+        D_gradcheck=st.just(2), #integers(min_value=1, max_value=2),
         weights_precision=st.just(SparseType.FP16),
-        stochastic_rounding=st.booleans(),
-        weighted=st.booleans(),
-        row_wise=st.booleans(),
-        mixed=st.booleans(),
-        use_cache=st.booleans(),
-        cache_algorithm=st.sampled_from(
-            split_table_batched_embeddings_ops.CacheAlgorithm
-        ),
-        use_cpu=st.booleans()
+        stochastic_rounding=st.just(True), #booleans(),
+        weighted=st.just(False), #booleans(),
+        row_wise=st.just(True), #booleans(),
+        mixed=st.just(True), #booleans(),
+        use_cache=st.just(False), #booleans(),
+        cache_algorithm=st.just(split_table_batched_embeddings_ops.CacheAlgorithm.LFU), #sampled_from(
+            # split_table_batched_embeddings_ops.CacheAlgorithm
+        # ),
+        use_cpu=st.just(False) #booleans()
         if (gpu_available and not TEST_WITH_ROCM)
         else st.just(False)
         if (gpu_available and TEST_WITH_ROCM)
         else st.just(True),
-        exact=st.booleans(),
-        output_dtype=st.sampled_from([SparseType.FP32, SparseType.FP16]),
+        exact=st.just(True), #booleans(),
+        output_dtype=st.sampled_from([SparseType.FP16]),
     )
     @settings(
         verbosity=Verbosity.verbose,
