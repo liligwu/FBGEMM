@@ -12,6 +12,8 @@ from typing import Callable, List, Optional, Tuple
 import numpy as np
 import torch
 from fbgemm_gpu.split_table_batched_embeddings_ops import SparseType
+
+# pyre-fixme[21]: Could not find name `default_rng` in `numpy.random` (stubbed).
 from numpy.random import default_rng
 from torch import Tensor
 
@@ -208,21 +210,11 @@ def generate_requests(
         assert E >= L, "num-embeddings must be greater than equal to bag-size"  # the vacabulary should more than the length of a sentence
         # oversample and then remove duplicates to obtain sampling without
         # replacement
-        all_indices = (np.random.zipf(a=alpha, size=(iters, T, B, 3 * L)) - 1) % E   # shape(10, 2, 65536, 96) https://numpy.org/doc/stable/reference/random/generated/numpy.random.zipf.html#numpy-random-zipf  limit the range of the smaples [0, 999999], will this change the distribution since "% E"? (very unlikely if E is large enough)
-        for index_tuple in itertools.product(range(iters), range(T), range(B)):
-            # sample without replacement from
-            # https://stats.stackexchange.com/questions/20590/how-do-i-sample-without-replacement-using-a-sampling-with-replacement-function
-            r = set()
-            for x in all_indices[index_tuple]: # x in all_indices[0, 0, 0]
-                if x not in r:
-                    r.add(x)
-                    if len(r) == L:
-                        break
-            assert (len(r)) == L, "too skewed distribution (alpha too big)"   # if all elements in the L dimention are in the few first ranked (most frequent) words.
-            all_indices[index_tuple][:L] = list(r)  # all_indices[0, 0, 0][:32] = [0, 1, 2, 3, 4, 6, 8, 9, 10, 395, 11, 19209, 13, 137, ...]
-        # shuffle indices so we don't have unintended spatial locality
-        all_indices = torch.as_tensor(all_indices[:, :, :, :L])    # torch.Size([10, 2, 65536, 32])
-        rng = default_rng()   # new random generator https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.default_rng
+        all_indices = (np.random.zipf(a=alpha, size=(iters, T, B, 3 * L)) - 1) % E
+        all_indices = torch.ops.fbgemm.bottom_unique_k_per_row(
+            torch.as_tensor(all_indices), L
+        )
+        rng = default_rng()
         permutation = torch.as_tensor(
             rng.choice(E, size=all_indices.max().item() + 1, replace=False)   # all_indices.max() = 999999
         )    # torch.Size([10000000])
@@ -252,8 +244,15 @@ def benchmark_requests(
     func: Callable[[Tensor, Tensor, Optional[Tensor]], Tensor],
     flush_gpu_cache_size_mb: int = 0,
     check_median: bool = False,
+    num_warmups: int = 0,
 ) -> float:
     times = []
+
+    if num_warmups > 0:
+        indices, offsets, weights = requests[0]
+        for _ in range(num_warmups):
+            func(indices, offsets, weights)
+
     if torch.cuda.is_available():
         torch.cuda.synchronize()
         start_event = torch.cuda.Event(enable_timing=True)

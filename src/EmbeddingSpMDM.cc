@@ -20,6 +20,7 @@
 #include "./CodeCache.h"
 #include "./MaskAvx2.h"
 #include "./RefImplementations.h"
+#include "fbgemm/SimdUtils.h"
 #include "fbgemm/Types.h"
 
 namespace fbgemm {
@@ -313,7 +314,7 @@ GenEmbeddingSpMDMLookup<
                   const float*, // weights
                   outType*, // out
                   const int32_t*, // compressed_indices_table and then mask
-                  const int*>(asmjit::CallConv::kIdHost),
+                  const int*>(asmjit::CallConvId::kHost),
               a->environment());
         } else {
           func.init(
@@ -327,7 +328,7 @@ GenEmbeddingSpMDMLookup<
                   const offsetType*, // offsets or lengths
                   const float*, // weights
                   outType*, // out and then mask
-                  const int*>(asmjit::CallConv::kIdHost),
+                  const int*>(asmjit::CallConvId::kHost),
               a->environment());
         }
 
@@ -336,12 +337,12 @@ GenEmbeddingSpMDMLookup<
 
         if (instSet == inst_set_t::avx2) {
           frame.setDirtyRegs(
-              x86::Reg::kGroupVec,
+              asmjit::RegGroup::kVec,
               asmjit::Support::bitMask(0, 1, 2, 3, 4, 5, 6, 7) |
                   asmjit::Support::bitMask(8, 9, 10, 11, 12, 13, 14, 15));
         } else {
           frame.setDirtyRegs(
-              x86::Reg::kGroupVec,
+              asmjit::RegGroup::kVec,
               asmjit::Support::bitMask(0, 1, 2, 3, 4, 5, 6, 7) |
                   asmjit::Support::bitMask(8, 9, 10, 11, 12, 13, 14, 15) |
                   asmjit::Support::bitMask(16, 17, 18, 19, 20, 21, 22, 23) |
@@ -349,7 +350,7 @@ GenEmbeddingSpMDMLookup<
         }
 
         frame.setDirtyRegs(
-            x86::Reg::kGroupGp,
+            asmjit::RegGroup::kGp,
             reg_id == 15
                 ? asmjit::Support::bitMask(8, 9, 10, 11, 12, 13, 14, 15)
                 : asmjit::Support::bitMask(8, 9, 10, 11, 12, 13, 14));
@@ -955,7 +956,8 @@ typename EmbeddingSpMDMKernelSignature<inType, indxType, offsetType, outType>::
         bool use_offsets,
         int64_t output_stride /*=-1*/,
         int64_t input_stride /*=-1*/,
-        bool scale_bias_last /*=true*/) {
+        bool scale_bias_last /*=true*/,
+        bool no_bag /*=false*/) {
   if (!cpuinfo_initialize()) {
     throw std::runtime_error("Failed to initialize cpuinfo!");
   }
@@ -972,6 +974,35 @@ typename EmbeddingSpMDMKernelSignature<inType, indxType, offsetType, outType>::
     }
   }
   const inst_set_t isa = fbgemmInstructionSet();
+  if (no_bag == true) {
+    return [=](int64_t output_size,
+               int64_t index_size,
+               int64_t data_size,
+               const inType* input,
+               const indxType* indices,
+               const offsetType* offsets_or_lengths,
+               const float* weights,
+               outType* out) {
+      return EmbeddingSpMDM_ref(
+          block_size,
+          output_size,
+          index_size,
+          data_size,
+          input,
+          indices,
+          offsets_or_lengths,
+          weights,
+          normalize_by_lengths,
+          out,
+          is_weight_positional,
+          use_offsets,
+          output_stride,
+          input_stride,
+          scale_bias_last,
+          no_bag);
+    };
+  }
+
   if ((std::is_same<inType, float>::value ||
        std::is_same<inType, float16>::value) &&
       block_size == 1 && isYmm(isa) && output_stride == block_size &&
@@ -1339,7 +1370,8 @@ GenerateEmbeddingSpMDMRowWiseSparse(
       bool use_offsets,                                       \
       int64_t output_stride,                                  \
       int64_t input_stride,                                   \
-      bool scale_bias_last);
+      bool scale_bias_last,                                   \
+      bool no_bag);
 
 #define INSTANTIATE_SPMDMFP8_BASE(INDEX_TYPE, OFFSET_TYPE, OUT_TYPE)       \
   template FBGEMM_API typename EmbeddingSpMDMKernelSignature<              \
