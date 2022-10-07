@@ -84,6 +84,7 @@ def cli() -> None:
 @click.option("--weights-precision", type=SparseType, default=SparseType.FP32)
 @click.option("--stoc", is_flag=True, default=False)
 @click.option("--iters", default=100)
+@click.option("--warmup-runs", default=0)
 @click.option("--managed", default="device")
 @click.option("--mixed", is_flag=True, default=False)
 @click.option("--num-embeddings", default=int(1e5))
@@ -107,6 +108,7 @@ def device(  # noqa C901
     weights_precision: SparseType,
     stoc: bool,   # stochastic rounding
     iters: int,
+    warmup_runs: int,
     managed: str,
     mixed: bool,
     num_embeddings: int,
@@ -259,6 +261,7 @@ def device(  # noqa C901
             feature_requires_grad=feature_requires_grad,
         ),
         flush_gpu_cache_size_mb=flush_gpu_cache_size_mb,
+        num_warmups=warmup_runs,
     )
     logging.info(
         f"Forward, B: {B}, "
@@ -283,12 +286,14 @@ def device(  # noqa C901
             offsets.long(),
             per_sample_weights,
             feature_requires_grad=feature_requires_grad,
-        ).backward(grad_output),
+        ),
         flush_gpu_cache_size_mb=flush_gpu_cache_size_mb,
+        bwd_only=True,
+        grad=grad_output,
     )
     logging.info(
-        f"ForwardBackward, B: {B}, E: {E}, T: {T}, D: {D}, L: {L}, "
-        f"BW: {3 * read_write_bytes / time_per_iter / 1.0e9: .2f} GB/s, "
+        f"Backward, B: {B}, E: {E}, T: {T}, D: {D}, L: {L}, "
+        f"BW: {2 * read_write_bytes / time_per_iter / 1.0e9: .2f} GB/s, "
         f"T: {time_per_iter * 1.0e6:.0f}us"
     )
 
@@ -666,12 +671,14 @@ def cache(  # noqa C901
         requests,
         lambda indices, offsets, per_sample_weights: emb_nc(
             indices.long(), offsets.long(), per_sample_weights
-        ).backward(grad_output),
+        ),
         flush_gpu_cache_size_mb=flush_gpu_cache_size_mb,
+        bwd_only=True,
+        grad=grad_output,
     )
     logging.info(
-        f"ForwardBackward (UVM), B: {B}, E: {E}, T: {T}, D: {D}, L: {L}, "
-        f"BW: {3 * param_size_multiplier * B * sum(Ds) * L / time_per_iter / 1.0e9: .2f} GB/s, "
+        f"Backward (UVM), B: {B}, E: {E}, T: {T}, D: {D}, L: {L}, "
+        f"BW: {2 * param_size_multiplier * B * sum(Ds) * L / time_per_iter / 1.0e9: .2f} GB/s, "
         f"T: {time_per_iter * 1.0e6:.0f}us"
     )
 

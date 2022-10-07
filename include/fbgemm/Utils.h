@@ -102,12 +102,12 @@ void printMatrix(
  */
 template <typename T>
 FBGEMM_API void transpose_simd(
-    unsigned M,
-    unsigned N,
+    int64_t M,
+    int64_t N,
     const T* src,
-    unsigned ld_src,
+    int64_t ld_src,
     T* dst,
-    unsigned ld_dst);
+    int64_t ld_dst);
 
 /**
  * @brief Explicitly set instruction set to be used
@@ -138,6 +138,11 @@ FBGEMM_API bool fbgemmHasAvx2Support();
  * @brief Are we running on a AVX512_VNNI supported cpu?
  */
 FBGEMM_API bool fbgemmHasAvx512VnniSupport();
+
+/**
+ * @brief Are we running on a ARM Neon supported cpu?
+ */
+FBGEMM_API bool fbgemmHasArmNeonSupport();
 
 /**
  * @brief Retrieve current CPU instruction set

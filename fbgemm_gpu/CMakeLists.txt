@@ -168,11 +168,12 @@ set(codegen_dependencies
     ${CMAKE_CURRENT_SOURCE_DIR}/include/fbgemm_gpu/sparse_ops_utils.h)
 
 if(USE_ROCM)
+message(STATUS "${PYTHON_EXECUTABLE}" "${CMAKE_CODEGEN_DIR}/embedding_backward_code_generator.py" "--opensource --is_rocm")
   execute_process(
     COMMAND
       "${PYTHON_EXECUTABLE}"
       "${CMAKE_CODEGEN_DIR}/embedding_backward_code_generator.py"
-      "--opensource" DEPENDS "${codegen_dependencies}")
+      "--opensource" "--is_rocm" DEPENDS "${codegen_dependencies}")
 
   set(header_include_dir
       ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -180,6 +181,13 @@ if(USE_ROCM)
 
   hipify(CUDA_SOURCE_DIR ${PROJECT_SOURCE_DIR} HEADER_INCLUDE_DIR
          ${header_include_dir})
+
+  execute_process(
+    COMMAND sh -c "${ROCM_PATH}/hip/bin/hipcc -x hip --cuda-device-only -save-temps -c -O3 \
+      ${CMAKE_CURRENT_SOURCE_DIR}/hip_kernel/split_tbe_fwd_hip.cpp -o \
+      ${CMAKE_CURRENT_SOURCE_DIR}/hip_kernel/split_tbe_fwd_hip_kernel.hsp -o \
+      ${CMAKE_CURRENT_SOURCE_DIR}/hip_kernel/split_tbe_fwd_hip_kernel.hsaco")
+
 else()
   add_custom_command(
     OUTPUT ${gen_cpu_source_files} ${gen_gpu_source_files}
