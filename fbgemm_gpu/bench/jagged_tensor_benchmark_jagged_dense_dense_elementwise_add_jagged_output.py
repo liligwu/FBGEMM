@@ -68,7 +68,7 @@ def device(
     time, jagged_output = benchmark_torch_function(
         torch.ops.fbgemm.jagged_dense_dense_elementwise_add_jagged_output,
         (values_2d, [offsets], output, output_sq),
-        iters=1000,
+        iters=1,
     )
     num_bytes = offsets_nbytes + 4 * values_nbytes
     logging.info(

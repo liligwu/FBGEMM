@@ -58,7 +58,7 @@ def device(
         values_2d = values_2d.cuda()
 
     time, output = benchmark_torch_function(
-        torch.ops.fbgemm.jagged_2d_to_dense, (values_2d, offsets, max_len), iters=1000
+        torch.ops.fbgemm.jagged_2d_to_dense, (values_2d, offsets, max_len), iters=1
     )
 
     torch.save(output, 'jagged_to_dense_output.pt')

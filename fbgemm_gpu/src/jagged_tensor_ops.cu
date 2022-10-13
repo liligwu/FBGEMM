@@ -193,7 +193,7 @@ std::tuple<dim3, dim3, StackArray<int64_t>> check_shape_and_partition_(
   const int num_jagged_dim = dense_tensor.dim() - 2;
   TORCH_CHECK(num_jagged_dim <= kStackArrayMaxDims);
   jagged_dims_tensor.ndim = num_jagged_dim;
-  std::memcpy(
+  std::memcpy( //https://en.cppreference.com/w/cpp/string/byte/memcpy
       &(jagged_dims_tensor.vals[0]),
       dense_tensor.sizes().data() + 1,
       num_jagged_dim * sizeof(int64_t));
@@ -282,7 +282,7 @@ __global__
 __launch_bounds__(kMaxThreads) void jagged_dense_dense_elementwise_jagged_output_kernel_(
     const at::PackedTensorAccessor32<scalar_t, 2, at::RestrictPtrTraits>
         x_values,
-    StackArray<index_t*> x_offsets,
+    StackArray<index_t*> x_offsets,  // 0, 2, 4 (batch_size + 1)
     StackArray<int64_t> x_offsets_sizes,
     const at::PackedTensorAccessor32<scalar_t, 3, at::RestrictPtrTraits> y_0,
     const at::PackedTensorAccessor32<scalar_t, 3, at::RestrictPtrTraits> y_1,
@@ -290,12 +290,19 @@ __launch_bounds__(kMaxThreads) void jagged_dense_dense_elementwise_jagged_output
         output_values,
     StackArray<int64_t> jagged_dims,
     F f) {
+  // --batch-size=2 --embedding-dim=3 --max-len=4
   const int inner_dense_size = y_0.size(2);
-  const int nnz = x_values.size(0);
-
-  const int offset_begin = blockIdx.x * blockDim.y + threadIdx.y;
-  const int offset_stride = gridDim.x * blockDim.y;
-  for (int offset = offset_begin; offset < nnz; offset += offset_stride) {
+  const int nnz = x_values.size(0); // 4
+  
+  if ((int)threadIdx.x == 0) {
+    printf("==========this is in kernel\n");
+    printf("blockDim: {%d, %d, %d}\n", (int)blockDim.x, (int)blockDim.y, (int)blockDim.z); // (3, 16, 1)
+    printf("gridDim: {%d, %d, %d}\n", (int)gridDim.x, (int)gridDim.y, (int)gridDim.z); // (1, 1, 1)
+  }
+  const int offset_begin = blockIdx.x * blockDim.y + threadIdx.y; // blockIdx.x (0, 1, 2) * 16 + (0, 1, ... 15)
+  const int offset_stride = gridDim.x * blockDim.y; // 1 * 16
+  for (int offset = offset_begin; offset < nnz; offset += offset_stride) { // nnz = 4
+    printf("offset: %d\n", offset); // offset = 0, 1, 2, ...
     int offset_temp = offset;
     int jidx = 0;
     bool truncated = false;
@@ -305,19 +312,30 @@ __launch_bounds__(kMaxThreads) void jagged_dense_dense_elementwise_jagged_output
       // Binary search the first that is bigger than offset
       int count = x_offsets_sizes.vals[d] - 1;
       int first = 1;
+      printf("==============in while========\n");
       while (count > 0) {
+        printf("-------start while\n");
+        printf("count: %d\n", count);  // 2
         int idx = first;
-        int step = count / 2;
-        idx += step;
+        int step = count / 2; //1
+        idx += step; // 2
+        // if ((int)threadIdx.x == 0){
+        printf("step: %d\n", step);
+        printf("idx: %d (thread.y: %d)\n", idx, (int)threadIdx.y);
+        // }
+        printf("x_offsets.vals[d][idx]: %d, offset_temp: %d\n", x_offsets.vals[d][idx], offset_temp);
         if (x_offsets.vals[d][idx] <= offset_temp) {
           first = ++idx;
           count -= step + 1;
         } else {
           count = step;
         }
+        printf("-------end while\n");
       }
+      printf("===========================\n");
 
       --first;
+      printf("first: %d (thread.y: %d)\n", first, (int)threadIdx.y);
       int coord = offset_temp - x_offsets.vals[d][first];
       if (coord >= jagged_dims.vals[d]) {
         truncated = true;
@@ -327,12 +345,14 @@ __launch_bounds__(kMaxThreads) void jagged_dense_dense_elementwise_jagged_output
       dim_prod *= jagged_dims.vals[d];
       offset_temp = first;
     }
-
+    printf("jidx: %d\n", jidx);
+    printf("offset_temp out loop: %d\n", offset_temp);
     if (!truncated) {
       const int oidx = offset_temp;
       int iidx;
-      for (iidx = threadIdx.x; iidx * 2 + 1 < inner_dense_size;
+      for (iidx = threadIdx.x; iidx * 2 + 1 < inner_dense_size;  // write two values in each loop
            iidx += blockDim.x) {
+        printf("iidx: %d\n", iidx);
         output_values[offset][2 * iidx] =
             f(x_values[offset][2 * iidx],
               y_0[oidx][jidx][2 * iidx],
@@ -348,7 +368,7 @@ __launch_bounds__(kMaxThreads) void jagged_dense_dense_elementwise_jagged_output
               y_0[oidx][jidx][2 * iidx],
               y_1[oidx][jidx][2 * iidx]);
       }
-    } else {
+    } else { // truncated
       int iidx;
       for (iidx = threadIdx.x; iidx * 2 + 1 < inner_dense_size;
            iidx += blockDim.x) {
@@ -894,6 +914,20 @@ void jagged_dense_elementwise_jagged_output_(
           x_offsets_contig[d].template data_ptr<index_t>();                    \
       x_offset_sizes.vals[d] = x_offsets[d].numel();                           \
     }                                                                          \
+    std::cout << "=============== this is the test of the kernel" << std::endl;\
+    std::cout << "num_jagged_dim: " << num_jagged_dim << std::endl << std::endl;\
+    std::cout << "x_offsets: " << x_offsets << std::endl << std::endl;\
+    std::cout << "NUM_JAGGED_DIM: " << NUM_JAGGED_DIM << std::endl << std::endl;\
+    std::cout << "blocks: " << blocks.x << "," << blocks.y << ","  << blocks.z << std::endl << std::endl;\
+    std::cout << "threads: " << threads.x << "," << threads.y << "," << threads.z << std::endl << std::endl;\
+    std::cout << "x_values: " << x_values << std::endl << std::endl;\
+    std::cout << "x_offset_ptrs: " << x_offset_ptrs.vals << std::endl << std::endl;\
+    std::cout << "x_offsets_contig: " << x_offsets_contig << std::endl << std::endl;\
+    std::cout << "x_offset_sizes: " << x_offset_sizes.vals << std::endl << std::endl;\
+    std::cout << "y_0_reshaped: " << y_0_reshaped << std::endl << std::endl;\
+    std::cout << "y_1_reshaped: " << y_1_reshaped << std::endl << std::endl;\
+    std::cout << "output_values: " << output_values << std::endl << std::endl;\
+    std::cout << "jagged_dims_tensor: " << jagged_dims_tensor.ndim << std::endl << std::endl;\
     jagged_dense_dense_elementwise_jagged_output_kernel_<                      \
         NUM_JAGGED_DIM,                                                        \
         index_t><<<blocks, threads, 0, at::cuda::getCurrentCUDAStream()>>>(    \

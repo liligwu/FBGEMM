@@ -33,7 +33,7 @@ def cli() -> None:
 @click.option("--batch-size", type=int, default=128)
 @click.option("--embedding-dim", type=int, default=128)
 @click.option("--max-len", type=int, default=128)
-@click.option("--elem-type", type=str, default="half")
+@click.option("--elem-type", type=str, default="float")
 def device(
     batch_size: int,
     embedding_dim: int,

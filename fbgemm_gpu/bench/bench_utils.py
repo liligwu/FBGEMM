@@ -27,7 +27,7 @@ def benchmark_torch_function(
     args,
     flush_gpu_cache_size_mb: int = 40,
     iters: int = 10,
-    num_warmups: int = 2,
+    num_warmups: int = 0,
 ) -> Tuple[float, Tensor]:
     for _ in range(num_warmups):
         output = f(*args)
