@@ -990,6 +990,7 @@ DEVICE_INLINE void stochastic_rounding_vector(
     float2 qparams) {
   uint4 random_bits = stochastic_rounding_rand4(&state);
   float inv_scale = 255.0f / (qparams.x * 255.0f + kQParamEps);
+  printf("==================== in stochastic float inv_scale, %f \n", inv_scale);
   output[0] = stochastic_rounding_scalar_uint8(
       (value.acc.x - qparams.y) * inv_scale, random_bits.x);
   output[1] = stochastic_rounding_scalar_uint8(
@@ -1008,6 +1009,7 @@ DEVICE_INLINE void stochastic_rounding_vector(
     float2 qparams) {
   uint4 random_bits = stochastic_rounding_rand4(&state);
   float inv_scale = 255.0f / (qparams.x * 255.0f + kQParamEps);
+  printf("====================inv_scale, %f \n", inv_scale);
   output[0] = stochastic_rounding_scalar_uint8(
       (value.acc.x - qparams.y) * inv_scale, random_bits.x);
   output[1] = stochastic_rounding_scalar_uint8(
@@ -1031,10 +1033,20 @@ template <>
 DEVICE_INLINE void
 nearest_rounding_vector(uint8_t* output, Vec4T<float> value, float2 qparams) {
   float inv_scale = 255.0f / (qparams.x * 255.0f + kQParamEps);
+  printf("====================in nearest float inv_scale, %f \n", inv_scale);
+  printf("====================value.acc.x: %f, value.acc.y: %f\n, value.acc.z: %f, value.acc.w: %f \n", value.acc.x, value.acc.y, value.acc.z, value.acc.w);
+  printf("========(value.acc.x - qparams.y) * inv_scale: %f\n", (value.acc.x - qparams.y) * inv_scale);
+  printf("========(value.acc.y - qparams.y) * inv_scale: %f\n", (value.acc.y - qparams.y) * inv_scale);
+  printf("========(value.acc.z - qparams.y) * inv_scale: %f\n", (value.acc.z - qparams.y) * inv_scale);
+  printf("========(value.acc.w - qparams.y) * inv_scale: %f\n", (value.acc.w - qparams.y) * inv_scale);
   output[0] = lrintf((value.acc.x - qparams.y) * inv_scale);
   output[1] = lrintf((value.acc.y - qparams.y) * inv_scale);
   output[2] = lrintf((value.acc.z - qparams.y) * inv_scale);
   output[3] = lrintf((value.acc.w - qparams.y) * inv_scale);
+  printf("====================output[0], %u \n", output[0]);
+  printf("====================output[1], %u \n", output[1]);
+  printf("====================output[2], %u \n", output[2]);
+  printf("====================output[3], %u \n", output[3]);
 }
 
 template <>
@@ -1043,6 +1055,7 @@ DEVICE_INLINE void nearest_rounding_vector(
     Vec4T<at::Half> value,
     float2 qparams) {
   float inv_scale = 255.0f / (qparams.x * 255.0f + kQParamEps);
+  printf("====================in nearest half inv_scale, %f \n", inv_scale);
   output[0] = lrintf((value.acc.x - qparams.y) * inv_scale);
   output[1] = lrintf((value.acc.y - qparams.y) * inv_scale);
   output[2] = lrintf((value.acc.z - qparams.y) * inv_scale);
@@ -1062,8 +1075,10 @@ DEVICE_INLINE void quantize_store(
     StochasticRoundingRNGState* state,
     float2 qparams) {
   if (!state) {
+    printf("========fall into nearest rounding\n");
     nearest_rounding_vector<dst_t, src_t>(output, value, qparams);
   } else {
+    printf("========fall into stochastic rounding\n");
     stochastic_rounding_vector<dst_t, src_t>(output, value, *state, qparams);
   }
 }
@@ -1171,8 +1186,10 @@ struct WeightRow {
   // embedding assume dst_t is higher precision than cache_t and emb_t
   DEVICE_INLINE void store(Vec4T<dst_t> v, int32_t d, float2 qparams) {
     if (cache_row_) {
+      printf("=======fall into cache_row_ \n");
       quantize_store(cache_row_ + d, v, stoc_rounding_state_, qparams);
     } else {
+      printf("=======fall into row \n");
       quantize_store(row_ + d, v, stoc_rounding_state_, qparams);
     }
   }

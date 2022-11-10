@@ -4933,16 +4933,16 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
                 )
 
     @given(
-        T=st.integers(min_value=1, max_value=5),
-        D=st.integers(min_value=2, max_value=128),
-        log_E=st.integers(min_value=2, max_value=3),
+        T=st.integers(min_value=1, max_value=1),
+        D=st.integers(min_value=2, max_value=2),
+        log_E=st.integers(min_value=2, max_value=2),
         weights_precision=st.sampled_from(
-            [SparseType.FP16, SparseType.FP32, SparseType.INT8]
+            [ SparseType.INT8]
         ),
-        mixed=st.booleans(),
-        use_cache=st.booleans(),
-        output_dtype=st.sampled_from([SparseType.FP32, SparseType.FP16]),
-        num_indices_per_table=st.integers(min_value=1, max_value=5),
+        mixed=st.just(True),
+        use_cache=st.just(False),
+        output_dtype=st.sampled_from([ SparseType.FP16]),
+        num_indices_per_table=st.integers(min_value=2, max_value=2),
     )
     @settings(
         verbosity=Verbosity.verbose,
@@ -5065,10 +5065,18 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
                     False,
                 )
                 pruned_index = pruned_indices[i]
+                print("==============pruned_index:", pruned_index)
+                print("==============table_weight:", table_weight)
                 row_weight = table_weight[pruned_index]
+                
                 if weights_precision == SparseType.INT8:
                     row_weight = row_weight[:-INT8_EMB_ROW_DIM_OFFSET]
+                
+                print("==============table_momentum1[pruned_index]", table_momentum1[pruned_index])
+                print("==============expected_row_momentum1", expected_row_momentum1)
                 self.assertEqual(table_momentum1[pruned_index], expected_row_momentum1)
+                print("==============row weight", row_weight)
+                print("==============expected_row_weight", expected_row_weight)
                 torch.testing.assert_close(
                     row_weight,
                     expected_row_weight,
@@ -5079,13 +5087,19 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
 
         check_weight_momentum(1)
 
+        print("================pruned_indices_tensor:", pruned_indices_tensor)
+        print("================pruned_indices_offsets_tensor:", pruned_indices_offsets_tensor)
+        print("================logical_table_ids_tensor:", logical_table_ids_tensor)
+        print("================buffer_ids_tensor:", buffer_ids_tensor)
         cc.reset_embedding_weight_momentum(
             pruned_indices_tensor,
             pruned_indices_offsets_tensor,
             logical_table_ids_tensor,
             buffer_ids_tensor,
         )
-
+        print("checking check_weight_momentum(0)")
+        for i, r in enumerate(weight[0]):
+            print("weight[", i, "]:", r)
         check_weight_momentum(0)
 
 
