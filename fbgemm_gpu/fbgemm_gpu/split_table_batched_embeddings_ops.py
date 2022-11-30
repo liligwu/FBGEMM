@@ -1400,6 +1400,7 @@ class DenseTableBatchedEmbeddingBagsCodegen(nn.Module):
         hash_size_cumsum = [hash_size_cumsum[t] for t in feature_table_map] + [
             hash_size_cumsum[-1]
         ]
+        print("=========hash_size_cumsum:", hash_size_cumsum)
         self.register_buffer(
             "hash_size_cumsum",
             torch.tensor(

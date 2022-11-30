@@ -47,10 +47,10 @@ from hypothesis.strategies import composite
 from torch import Tensor
 
 
-MAX_EXAMPLES = 40
+MAX_EXAMPLES = 1
 
 # For long running tests reduce the number of iterations to reduce timeout errors.
-MAX_EXAMPLES_LONG_RUNNING = 15
+MAX_EXAMPLES_LONG_RUNNING = 1
 
 Deviceable = TypeVar("Deviceable", torch.nn.EmbeddingBag, Tensor)
 
@@ -2577,6 +2577,8 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
             Es = [
                 np.random.randint(low=int(0.5 * E), high=int(2.0 * E)) for _ in range(T)
             ]
+
+        
         compute_device = split_table_batched_embeddings_ops.ComputeDevice.CUDA
         if use_cpu:
             managed = [split_table_batched_embeddings_ops.EmbeddingLocation.HOST] * T
@@ -2699,6 +2701,7 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
         xw = torch.cat([xw.view(1, B, L) for xw in xws_acc_type], dim=0)
 
         (indices, offsets) = get_table_batched_offsets_from_dense(x, use_cpu)
+        print ("========= indices: ", indices, "offsets: ", offsets)
         fc2 = (
             cc(indices, offsets)
             if not weighted
@@ -2708,6 +2711,7 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
             goc = torch.cat([go.view(B, -1) for go in gos], dim=1)
         else:
             goc = torch.cat(gos, dim=0)
+        print("========= goc: ", goc )
         fc2.backward(goc)
         cc.flush()
 
@@ -2960,12 +2964,12 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
         )
 
     @given(
-        T=st.integers(min_value=1, max_value=5),
-        D=st.sampled_from([16, 32, 48, 64]),  # 16, 32, 48, 64
-        B=st.integers(min_value=1, max_value=128),
-        log_E=st.integers(min_value=3, max_value=5),
-        L=st.integers(min_value=0, max_value=20),
-        weighted=st.sampled_from([True, False]),
+        T=st.integers(min_value=1, max_value=1),
+        D=st.sampled_from([15]),  # 16, 32, 48, 64
+        B=st.integers(min_value=1, max_value=1),
+        log_E=st.integers(min_value=1, max_value=1),
+        L=st.integers(min_value=3, max_value=3),
+        weighted=st.just(False),
         mixed=st.just(False),
         optimizer=st.sampled_from(
             [
@@ -2975,7 +2979,7 @@ class SplitTableBatchedEmbeddingsTest(unittest.TestCase):
                 #OptimType.EXACT_ROWWISE_WEIGHTED_ADAGRAD,
             ]
         ),
-        long_segments=st.booleans(),
+        long_segments=st.just(False),
         pooling_mode=st.sampled_from(
             [
                 # can only uncomment this when fwd kernel support any pooling mode

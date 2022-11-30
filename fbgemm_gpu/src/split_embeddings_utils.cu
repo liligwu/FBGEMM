@@ -70,6 +70,7 @@ __global__ __launch_bounds__(kMaxThreads) void linearize_index_kernel(
         linear_indices) {
   const int32_t T = hash_size_cumsum.size(0) - 1;
   const int32_t B = (offsets.size(0) - 1) / T;
+//   printf("====T:%d  B:%d   offsets.size(0):%d \n", T, B, offsets.size(0));
   const int32_t b_t = blockIdx.x * blockDim.x + threadIdx.x;
   const int32_t b = b_t % B;
   const int32_t t = b_t / B;

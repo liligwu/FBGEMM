@@ -1282,8 +1282,8 @@ split_embedding{{ "_nobag" if nobag else "" }}_backward_codegen_{{ optimizer }}_
             }
 
             C10_CUDA_KERNEL_LAUNCH_CHECK();
-            {% if optimizer == "rowwise_adagrad" and not dense and (items_per_warp // 4 * kMaxElemPerThread) in [64, 128, 192, 256] %}
-            if(hip_opt_kernel_supported){
+            {% if optimizer == "rowwise_adagrad" and not dense and not nobag and (items_per_warp % 4 == 0) %} // * kMaxElemPerThread) in [64, 128, 192, 256] %}
+            if(1){
                 struct {
                     const void* p_output_grad;
                     void* p_emb_table;
@@ -1295,11 +1295,14 @@ split_embedding{{ "_nobag" if nobag else "" }}_backward_codegen_{{ optimizer }}_
                     const void* p_num_long_run_ids;
                     const void* p_sorted_infos;
                     magic_div_u32_t batch_mdiv;
+                    // {% if not nobag %}
+                    const int32_t* D_offsets;
+                    // {% endif %}
+		            const int64_t* weights_offsets;
                     uint32_t max_segment_length_per_warp;
                     {% if weighted %}
                     float   *indice_weights_sorted;
                     {% endif %}
-                    uint32_t emb_dim;
                     uint32_t batch;
                     uint32_t num_rows;
                     uint32_t num_tables;
@@ -1319,11 +1322,14 @@ split_embedding{{ "_nobag" if nobag else "" }}_backward_codegen_{{ optimizer }}_
                 karg.p_num_long_run_ids = num_long_run_ids.packed_accessor32<int32_t, 1, at::RestrictPtrTraits>().data();
                 karg.p_sorted_infos = infos_sorted.packed_accessor32<int32_t, 1, at::RestrictPtrTraits>().data();
                 karg.batch_mdiv = magic_div_u32_gen(B);
+                // {% if not nobag %} 
+                karg.D_offsets = D_offsets.packed_accessor32<int32_t, 1, at::RestrictPtrTraits>().data();
+                // {% endif %}
+                karg.weights_offsets = weights_offsets.packed_accessor32<int64_t, 1, at::RestrictPtrTraits>().data();
                 karg.max_segment_length_per_warp = max_segment_length_per_warp;
                 {% if weighted %}
                 karg.indice_weights_sorted = indice_weights_sorted.packed_accessor32<float, 1, at::RestrictPtrTraits>().data();
                 {% endif %}
-                karg.emb_dim = max_D;
                 karg.batch = B;
                 karg.num_rows = dev_weights.numel() / T / max_D;
                 karg.num_tables = T;
@@ -1358,11 +1364,14 @@ split_embedding{{ "_nobag" if nobag else "" }}_backward_codegen_{{ optimizer }}_
                             (const int32_t*)karg.p_num_long_run_ids,
                             (const int32_t*)karg.p_sorted_infos ,
                             karg.batch_mdiv,
+                            // {% if not nobag %}
+                            karg.D_offsets,
+                            // {% endif %}
+                            karg.weights_offsets,
                             karg.max_segment_length_per_warp,
                             {% if weighted %}
                             karg.indice_weights_sorted,
                             {% endif %}
-                            karg.emb_dim ,
                             karg.batch ,
                             karg.num_rows,
                             karg.num_tables ,
@@ -1386,11 +1395,14 @@ split_embedding{{ "_nobag" if nobag else "" }}_backward_codegen_{{ optimizer }}_
                             (const int32_t*)karg.p_num_long_run_ids,
                             (const int32_t*)karg.p_sorted_infos ,
                             karg.batch_mdiv,
+                            // {% if not nobag %}
+                            karg.D_offsets,
+                            // {% endif %}
+                            karg.weights_offsets,
                             karg.max_segment_length_per_warp,
                             {% if weighted %}
                             karg.indice_weights_sorted,
                             {% endif %}
-                            karg.emb_dim ,
                             karg.batch ,
                             karg.num_rows,
                             karg.num_tables ,
@@ -1416,11 +1428,14 @@ split_embedding{{ "_nobag" if nobag else "" }}_backward_codegen_{{ optimizer }}_
                             (const int32_t*)karg.p_num_long_run_ids,
                             (const int32_t*)karg.p_sorted_infos ,
                             karg.batch_mdiv,
+                            // {% if not nobag %}
+                            karg.D_offsets,
+                            // {% endif %}
+                            karg.weights_offsets,
                             karg.max_segment_length_per_warp,
                             {% if weighted %}
                             karg.indice_weights_sorted,
                             {% endif %}
-                            karg.emb_dim ,
                             karg.batch ,
                             karg.num_rows,
                             karg.num_tables ,
@@ -1444,11 +1459,14 @@ split_embedding{{ "_nobag" if nobag else "" }}_backward_codegen_{{ optimizer }}_
                             (const int32_t*)karg.p_num_long_run_ids,
                             (const int32_t*)karg.p_sorted_infos ,
                             karg.batch_mdiv,
+                            // {% if not nobag %}
+                            karg.D_offsets,
+                            // {% endif %}
+                            karg.weights_offsets,
                             karg.max_segment_length_per_warp,
                             {% if weighted %}
                             karg.indice_weights_sorted,
                             {% endif %}
-                            karg.emb_dim ,
                             karg.batch ,
                             karg.num_rows,
                             karg.num_tables ,
