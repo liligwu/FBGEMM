@@ -422,7 +422,11 @@ Tensor uvm_to_cpu_clone(const Tensor& t) {
   return cpu_clone;
 }
 
-FBGEMM_GPU_ENUM_GLOGAL(uvm)
+//FBGEMM_GPU_ENUM_GLOGAL(uvm)
+  template class enum_registration<struct fbgemm_gpu_enum_tag_uvm>;
+    template <>
+      enum_registration<struct fbgemm_gpu_enum_tag_uvm>*
+            enum_registration<struct fbgemm_gpu_enum_tag_uvm> ::registration_list = nullptr;
 
 FBGEMM_GPU_ENUM_REGISTER_START(uvm, cudaMemory, Advise){
     FBGEMM_GPU_ENUM_ITEM(

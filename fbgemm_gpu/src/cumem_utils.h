@@ -81,6 +81,13 @@ void uvm_mem_advice_dont_fork(const Tensor& t);
 /// The copy uses single threaded memcpy
 Tensor uvm_to_cpu_clone(const Tensor& t);
 
-FBGEMM_GPU_ENUM_CREATE_TAG(uvm)
+//FBGEMM_GPU_ENUM_CREATE_TAG(uvm)
+  struct fbgemm_gpu_enum_tag_uvm {};
+  template <>                                                           \
+  enum_registration<struct fbgemm_gpu_enum_tag_uvm>*          \
+      enum_registration<                                                \
+          struct fbgemm_gpu_enum_tag_uvm>::registration_list;
+  extern template class enum_registration<                              \
+      struct fbgemm_gpu_enum_tag_uvm>;
 
 } // namespace fbgemm_gpu
