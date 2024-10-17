@@ -300,7 +300,6 @@ def has_experimental_support(
         and not nobag
         and not vbe
         and not is_index_select
-        and not is_rocm
         and not ssd
     )
 

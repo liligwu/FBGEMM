@@ -126,14 +126,14 @@ macro(RUN_GEN_SCRIPT SCRIPT)
     COMMAND "${PYTHON_EXECUTABLE}" ${SCRIPT} "--opensource" ${rocm_flag})
 endmacro()
 
-foreach(script
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_backward_split.py"
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_embedding_optimizer.py"
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_forward_quantized.py"
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_forward_split.py"
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_index_select.py")
-    RUN_GEN_SCRIPT(${script})
-endforeach()
+# foreach(script
+#     "${CMAKE_CODEGEN_DIR}/genscript/generate_backward_split.py"
+#     "${CMAKE_CODEGEN_DIR}/genscript/generate_embedding_optimizer.py"
+#     "${CMAKE_CODEGEN_DIR}/genscript/generate_forward_quantized.py"
+#     "${CMAKE_CODEGEN_DIR}/genscript/generate_forward_split.py"
+#     "${CMAKE_CODEGEN_DIR}/genscript/generate_index_select.py")
+#     RUN_GEN_SCRIPT(${script})
+# endforeach()
 
 
 ################################################################################
@@ -176,12 +176,12 @@ list(APPEND gen_gpu_host_source_files
     "gen_embedding_backward_sgd_split_unweighted_vbe_meta.cpp"
   )
 
-if(NOT USE_ROCM)
+# if(NOT USE_ROCM)
   list(APPEND gen_gpu_kernel_source_files
     "gen_embedding_forward_split_weighted_v2_kernel.cu"
     "gen_embedding_forward_split_unweighted_v2_kernel.cu"
     )
-endif()
+# endif()
 
 foreach(wdesc dense split)
   list(APPEND gen_gpu_kernel_source_files

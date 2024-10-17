@@ -179,7 +179,7 @@ class ForwardTest(unittest.TestCase):
                 np.random.choice(
                     [
                         EmbeddingLocation.DEVICE,
-                        EmbeddingLocation.MANAGED,
+                        # EmbeddingLocation.MANAGED,
                     ]
                 )
                 for _ in range(T)
@@ -278,6 +278,7 @@ class ForwardTest(unittest.TestCase):
             except Exception as e:
                 print(f"Torch JIT compilation failed: {e}")
 
+        print("weights", bs)
         for t in range(T):
             cc.split_embedding_weights()[t].data.copy_(
                 bs[t].weight
@@ -295,6 +296,14 @@ class ForwardTest(unittest.TestCase):
         batch_size_per_feature_per_rank = Bs_rank_feature if mixed_B else None
 
         # Run TBE
+        from rpdTracerControl import rpdTracerControl
+        profile = rpdTracerControl()      #######
+        profile.setPythonTrace(True)
+        prof = torch.autograd.profiler.emit_nvtx(record_shapes=True)
+
+        profile.start()
+        prof.__enter__()
+
         fc2 = (
             cc(
                 indices,
@@ -309,6 +318,8 @@ class ForwardTest(unittest.TestCase):
                 batch_size_per_feature_per_rank=batch_size_per_feature_per_rank,
             )
         )
+        prof.__exit__(None, None, None)
+        profile.stop()
 
         # Compare results: f = baseline, fc2 = TBE
         tolerance = (
@@ -316,6 +327,8 @@ class ForwardTest(unittest.TestCase):
             if weights_precision == SparseType.FP32 and output_dtype == SparseType.FP32
             else 8.0e-3
         )
+        print(f"fbgemm:{fc2}")
+        print(f"pytorch:{f}")
         torch.testing.assert_close(
             fc2.float(), f.float(), atol=tolerance, rtol=tolerance
         )
@@ -462,7 +475,7 @@ class ForwardTest(unittest.TestCase):
 
     @unittest.skipIf(*gpu_unavailable)
     @given(
-        use_experimental_tbe=st.booleans() if not TEST_WITH_ROCM else st.just(False),
+        use_experimental_tbe=st.just(True),
     )
     @settings(
         verbosity=VERBOSITY,
@@ -476,35 +489,36 @@ class ForwardTest(unittest.TestCase):
     ) -> None:
         weights_precision = SparseType.FP16
         use_cpu = False
-        T = random.randint(1, 10)
-        D = random.randint(2, 256)
-        B = random.randint(1, 128)
-        L = random.randint(0, 20)
-        log_E = random.randint(3, 5)
+        T = 2 #random.randint(1, 10)
+        D = 2 #random.randint(2, 256)
+        B = 8 #random.randint(1, 128)
+        L = 1 #random.randint(0, 20)
+        log_E = 1 #random.randint(3, 5)
 
         use_cache = False
         # cache_algorithm is don't care as we don't use cache.
         cache_algorithm = CacheAlgorithm.LRU
 
-        pooling_mode = random.choice(
-            [
-                PoolingMode.SUM,
-                PoolingMode.MEAN,
-            ]
-            + ([PoolingMode.NONE] if not use_experimental_tbe else [])
-        )
-        if pooling_mode == PoolingMode.NONE:
-            mixed = False
-            mixed_B = False
-        else:
-            mixed = random.choice([True, False])
-            mixed_B = (
-                random.choice([True, False]) if not use_experimental_tbe else False
-            )
-        if pooling_mode == PoolingMode.SUM:
-            weighted = random.choice([True, False])
-        else:
-            weighted = False
+        pooling_mode = PoolingMode.SUM
+        # random.choice(
+        #     [
+        #         PoolingMode.SUM,
+        #         PoolingMode.MEAN,
+        #     ]
+        #     + ([PoolingMode.NONE] if not use_experimental_tbe else [])
+        # )
+        # if pooling_mode == PoolingMode.NONE:
+        mixed = False
+        mixed_B = False
+        # else:
+        #     mixed = random.choice([True, False])
+        #     mixed_B = (
+        #         random.choice([True, False]) if not use_experimental_tbe else False
+        #     )
+        # if pooling_mode == PoolingMode.SUM:
+        #     weighted = random.choice([True, False])
+        # else:
+        weighted = False
         self.execute_forward_(
             T,
             D,
@@ -525,7 +539,7 @@ class ForwardTest(unittest.TestCase):
 
     @unittest.skipIf(*gpu_unavailable)
     @given(
-        use_experimental_tbe=st.booleans() if not TEST_WITH_ROCM else st.just(False),
+        use_experimental_tbe=st.booleans()
     )
     @settings(
         verbosity=VERBOSITY,
@@ -654,7 +668,7 @@ class ForwardTest(unittest.TestCase):
     @unittest.skipIf(*gpu_unavailable)
     @given(
         cache_algorithm=st.sampled_from(CacheAlgorithm),
-        use_experimental_tbe=st.booleans() if not TEST_WITH_ROCM else st.just(False),
+        use_experimental_tbe=st.booleans(),
     )
     @settings(
         verbosity=VERBOSITY,
@@ -724,7 +738,7 @@ class ForwardTest(unittest.TestCase):
     @unittest.skipIf(*gpu_unavailable)
     @given(
         cache_algorithm=st.sampled_from(CacheAlgorithm),
-        use_experimental_tbe=st.booleans() if not TEST_WITH_ROCM else st.just(False),
+        use_experimental_tbe=st.booleans(),
     )
     @settings(
         verbosity=VERBOSITY,

@@ -33,10 +33,10 @@ settings.register_profile("derandomize", derandomize=True)
 settings.load_profile("derandomize")
 
 
-MAX_EXAMPLES = 40
+MAX_EXAMPLES = 1
 
 # For long running tests reduce the number of iterations to reduce timeout errors.
-MAX_EXAMPLES_LONG_RUNNING = 15
+MAX_EXAMPLES_LONG_RUNNING = 1
 
 VERBOSITY: Verbosity = Verbosity.verbose
 

@@ -92,7 +92,7 @@ batch_index_select_dim0_codegen_forward_small_kernel(
 {%- endif %} {#-/* if not weighted */#}
 
 {% if not dense %}
-#ifndef USE_ROCM
+// #ifndef USE_ROCM
 // Support only the split-pooled TBE case
 template <
     typename emb_t,
@@ -121,7 +121,7 @@ __global__ void split_embedding_codegen_forward_{{ wdesc }}_v2_kernel(
     const int64_t* __restrict__ const weights_offsets,
     const int32_t* __restrict__ const lxu_cache_locations,
     output_t* __restrict__ const output);
-#endif
+// #endif
 {% endif %} {#-/* if not dense */#}
 
 
@@ -781,9 +781,9 @@ batch_index_select_dim0_codegen_forward_cuda(
         // if (!is_experimental)
         } else {
 
-#ifdef USE_ROCM
-            TORCH_CHECK(false, "is_experimental=True is not supported in ROCm");
-#else
+// #ifdef USE_ROCM
+//             TORCH_CHECK(false, "is_experimental=True is not supported in ROCm");
+// #else
             // Allocate num warps per table based on max_D
             const int num_warps_per_table = B * div_round_up(max_D, kWarpSize * 4);
             const uint32_t num_warps_per_threadblock = kForwardMaxThreads / kWarpSize;
@@ -822,7 +822,7 @@ batch_index_select_dim0_codegen_forward_cuda(
                 output.data_ptr<output_t>()
               );
             C10_CUDA_KERNEL_LAUNCH_CHECK();
-#endif
+// #endif
         }
         {%- endif %} // if has_experimental
         });
