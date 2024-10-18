@@ -140,7 +140,7 @@ class ForwardTest(unittest.TestCase):
         if use_cpu:
             D = (D + 15) // 16 * 4
         else:
-            D = D * 4
+            D = D
         if not mixed:
             Ds = [D] * T
             Es = [E] * T
@@ -277,8 +277,8 @@ class ForwardTest(unittest.TestCase):
                 cc = torch.jit.script(cc)
             except Exception as e:
                 print(f"Torch JIT compilation failed: {e}")
-
-        print("weights", bs)
+        print("========================")
+        print("weights", bs[0].weight, bs[1].weight)
         for t in range(T):
             cc.split_embedding_weights()[t].data.copy_(
                 bs[t].weight
@@ -332,6 +332,7 @@ class ForwardTest(unittest.TestCase):
         torch.testing.assert_close(
             fc2.float(), f.float(), atol=tolerance, rtol=tolerance
         )
+        print("=================================================")
 
     def test_forward_cpu_int8(
         self,
@@ -490,7 +491,7 @@ class ForwardTest(unittest.TestCase):
         weights_precision = SparseType.FP16
         use_cpu = False
         T = 2 #random.randint(1, 10)
-        D = 2 #random.randint(2, 256)
+        D = 4 #random.randint(2, 256)
         B = 8 #random.randint(1, 128)
         L = 1 #random.randint(0, 20)
         log_E = 1 #random.randint(3, 5)
