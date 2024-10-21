@@ -1,0 +1,63 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.15, pytest-7.3.2, pluggy-1.5.0 -- /opt/conda/envs/py_3.10/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase(PosixPath('/workspace/FBGEMM_local/fbgemm_gpu/test/.hypothesis/examples'))
+rootdir: /workspace/FBGEMM_local/fbgemm_gpu
+plugins: flakefinder-1.1.0, cpp-2.3.0, xdist-3.3.1, xdoctest-1.1.0, rerunfailures-14.0, hypothesis-6.115.0
+collecting ... collected 9 items
+
+tbe/training/forward_test.py::ForwardTest::test_forward_cpu_fp32 PASSED
+tbe/training/forward_test.py::ForwardTest::test_forward_cpu_int8 PASSED
+tbe/training/forward_test.py::ForwardTest::test_forward_fused_pooled_emb_quant Trying example: test_forward_fused_pooled_emb_quant(
+    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_fused_pooled_emb_quant>,
+    T=1,
+    D=2,
+    B=1,
+    log_E=3,
+    L=0,
+    output_dtype=SparseType.FP16,
+)
+PASSED
+tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_fp16 Trying example: test_forward_gpu_no_cache_fp16(
+    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_no_cache_fp16>,
+    use_experimental_tbe=False,
+)
+PASSED
+tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_fp32 Trying example: test_forward_gpu_no_cache_fp32(
+    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_no_cache_fp32>,
+    use_experimental_tbe=False,
+)
+PASSED
+tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_int8 SKIPPED
+tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp16 Trying example: test_forward_gpu_uvm_cache_fp16(
+    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>,
+    cache_algorithm=CacheAlgorithm.LRU,
+    use_experimental_tbe=False,
+)
+PASSED
+tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp32 Trying example: test_forward_gpu_uvm_cache_fp32(
+    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp32>,
+    cache_algorithm=CacheAlgorithm.LRU,
+    use_experimental_tbe=False,
+)
+PASSED
+tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_int8 SKIPPED
+
+=============================== warnings summary ===============================
+test/tbe/training/forward_test.py::ForwardTest::test_forward_cpu_fp32
+test/tbe/training/forward_test.py::ForwardTest::test_forward_cpu_int8
+  /opt/conda/envs/py_3.10/lib/python3.10/site-packages/hypothesis/control.py:59: HypothesisDeprecationWarning: Using `assume` outside a property-based test is deprecated
+    note_deprecation(
+
+test/tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_fp16
+test/tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_fp32
+test/tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp16
+test/tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp32
+  /opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] tbe/training/forward_test.py:402: INT8 support is disabled
+SKIPPED [1] tbe/training/forward_test.py:578: INT8 support is disabled
+=================== 7 passed, 2 skipped, 6 warnings in 5.01s ===================

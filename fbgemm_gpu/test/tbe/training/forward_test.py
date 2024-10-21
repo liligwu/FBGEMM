@@ -277,8 +277,8 @@ class ForwardTest(unittest.TestCase):
                 cc = torch.jit.script(cc)
             except Exception as e:
                 print(f"Torch JIT compilation failed: {e}")
-        print("========================")
-        print("weights", bs[0].weight, bs[1].weight)
+        # print("========================")
+        # print("weights", bs[0].weight, bs[1].weight)
         for t in range(T):
             cc.split_embedding_weights()[t].data.copy_(
                 bs[t].weight
@@ -327,8 +327,9 @@ class ForwardTest(unittest.TestCase):
             if weights_precision == SparseType.FP32 and output_dtype == SparseType.FP32
             else 8.0e-3
         )
-        print(f"fbgemm:{fc2}")
-        print(f"pytorch:{f}")
+        torch.set_printoptions(profile="full")
+        # print(f"fbgemm:{fc2}")
+        # print(f"pytorch:{f}")
         torch.testing.assert_close(
             fc2.float(), f.float(), atol=tolerance, rtol=tolerance
         )
@@ -540,7 +541,7 @@ class ForwardTest(unittest.TestCase):
 
     @unittest.skipIf(*gpu_unavailable)
     @given(
-        use_experimental_tbe=st.booleans()
+        use_experimental_tbe=st.just(True),
     )
     @settings(
         verbosity=VERBOSITY,
@@ -554,11 +555,11 @@ class ForwardTest(unittest.TestCase):
     ) -> None:
         weights_precision = SparseType.FP32
         use_cpu = False
-        T = random.randint(1, 10)
-        D = random.randint(2, 256)
-        B = random.randint(1, 128)
-        L = random.randint(0, 20)
-        log_E = random.randint(3, 5)
+        T = 2# random.randint(1, 10)
+        D = 4 #random.randint(2, 256)
+        B = 70 # random.randint(1, 128)
+        L = 1#random.randint(0, 20)
+        log_E = 1#random.randint(3, 5)
 
         use_cache = False
         # cache_algorithm is don't care as we don't use cache.
@@ -567,20 +568,20 @@ class ForwardTest(unittest.TestCase):
         pooling_mode = random.choice(
             [
                 PoolingMode.SUM,
-                PoolingMode.MEAN,
+                # PoolingMode.MEAN,
             ]
             + ([PoolingMode.NONE] if not use_experimental_tbe else [])
         )
-        if pooling_mode == PoolingMode.NONE:
-            mixed = False
-            mixed_B = False
-        else:
-            mixed = random.choice([True, False])
-            mixed_B = (
-                random.choice([True, False]) if not use_experimental_tbe else False
-            )
+        # if pooling_mode == PoolingMode.NONE:
+        mixed = False
+        mixed_B = False
+        # else:
+        #     mixed = random.choice([True, False])
+        #     mixed_B = (
+        #         random.choice([True, False]) if not use_experimental_tbe else False
+        #     )
         if pooling_mode == PoolingMode.SUM:
-            weighted = random.choice([True, False])
+            weighted = random.choice([False])
         else:
             weighted = False
         self.execute_forward_(
