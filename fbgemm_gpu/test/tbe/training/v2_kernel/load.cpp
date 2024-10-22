@@ -759,10 +759,10 @@ int main() {
         4,
         indices,
         offsets,
-        0,
+        1,
         lxu_cache_locations,
         uvm_cache_stats,
-        0,
+        1,
         1
     );
     std::cout << "Result: " << result << std::endl;

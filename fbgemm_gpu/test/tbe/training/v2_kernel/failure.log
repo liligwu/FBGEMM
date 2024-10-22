@@ -4,60 +4,1882 @@ cachedir: .pytest_cache
 hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase(PosixPath('/workspace/FBGEMM_local/fbgemm_gpu/test/.hypothesis/examples'))
 rootdir: /workspace/FBGEMM_local/fbgemm_gpu
 plugins: flakefinder-1.1.0, cpp-2.3.0, xdist-3.3.1, xdoctest-1.1.0, rerunfailures-14.0, hypothesis-6.115.0
-collecting ... collected 9 items
+collecting ... collected 1 item
 
-tbe/training/forward_test.py::ForwardTest::test_forward_cpu_fp32 PASSED
-tbe/training/forward_test.py::ForwardTest::test_forward_cpu_int8 PASSED
-tbe/training/forward_test.py::ForwardTest::test_forward_fused_pooled_emb_quant Trying example: test_forward_fused_pooled_emb_quant(
-    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_fused_pooled_emb_quant>,
-    T=1,
-    D=2,
-    B=1,
-    log_E=3,
-    L=0,
-    output_dtype=SparseType.FP16,
-)
-PASSED
-tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_fp16 Trying example: test_forward_gpu_no_cache_fp16(
-    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_no_cache_fp16>,
-    use_experimental_tbe=False,
-)
-PASSED
-tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_fp32 Trying example: test_forward_gpu_no_cache_fp32(
-    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_no_cache_fp32>,
-    use_experimental_tbe=False,
-)
-PASSED
-tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_int8 SKIPPED
-tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp16 Trying example: test_forward_gpu_uvm_cache_fp16(
+tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp16 rpd_tracer, because
+dev_weights: [ CUDAHalfType{0} ]
+uvm_weights:  0.3337
+-0.9902
+ 0.6323
+ 0.8267
+-0.8472
+-0.6284
+-0.5474
+ 1.0391
+-1.9180
+ 0.9551
+ 0.3083
+ 0.1508
+-0.0888
+ 0.1538
+-1.0518
+ 0.6260
+ 0.1578
+-0.1355
+ 0.1364
+-0.2625
+-0.1415
+ 1.2217
+-1.1289
+ 1.1211
+ 0.9663
+ 0.3838
+ 0.7861
+ 2.4531
+-0.8804
+-0.5142
+-1.6641
+ 0.1725
+ 0.5215
+-0.6714
+ 2.5723
+ 0.5996
+-0.0807
+ 0.4841
+ 0.1740
+ 1.3789
+ 1.3555
+ 0.4866
+-1.2412
+-0.3535
+-0.0440
+-1.0791
+-0.6323
+-0.7217
+-2.2832
+-0.2576
+-1.5156
+ 0.0723
+[ CUDAHalfType{52} ]
+lxu_cache_weights: -0.8472 -0.6284 -0.5474  1.0391
+-2.2832 -0.2576 -1.5156  0.0723
+ 0.3337 -0.9902  0.6323  0.8267
+-1.9180  0.9551  0.3083  0.1508
+ 0.1578 -0.1355  0.1364 -0.2625
+-0.8804 -0.5142 -1.6641  0.1725
+ 0.5215 -0.6714  2.5723  0.5996
+-0.0888  0.1538 -1.0518  0.6260
+ 0.9663  0.3838  0.7861  2.4531
+-0.0440 -1.0791 -0.6323 -0.7217
+-0.1415  1.2217 -1.1289  1.1211
+ 1.3555  0.4866 -1.2412 -0.3535
+-0.0807  0.4841  0.1740  1.3789
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+[ CUDAFloatType{64,4} ]
+weights_placements:  2
+ 2
+[ CUDAIntType{2} ]
+weights_offsets:   0
+ 20
+[ CUDALongType{2} ]
+D_offsets:  0
+ 4
+ 8
+[ CUDAIntType{3} ]
+total_D: 8
+max_D: 4
+indices:  1
+ 0
+ 1
+ 4
+ 0
+ 1
+ 0
+ 1
+ 2
+ 4
+ 1
+ 0
+ 4
+ 4
+ 3
+ 3
+ 2
+ 1
+ 3
+ 1
+ 0
+ 0
+ 2
+ 1
+ 1
+ 4
+ 3
+ 0
+ 2
+ 2
+ 4
+ 2
+ 3
+ 4
+ 5
+ 5
+ 7
+ 2
+ 7
+ 3
+ 6
+ 2
+ 0
+ 1
+ 6
+ 7
+ 3
+ 7
+ 3
+ 2
+ 2
+ 3
+ 1
+ 7
+ 7
+ 3
+ 2
+ 6
+ 1
+ 7
+ 7
+ 3
+ 1
+ 0
+ 2
+ 1
+[ CUDALongType{66} ]
+offsets:   0
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+[ CUDALongType{67} ]
+pooling_mode: 1
+lxu_cache_locations:   0
+  2
+  0
+  4
+  2
+  0
+  2
+  0
+  3
+  4
+  0
+  2
+  4
+  4
+  7
+  7
+  3
+  0
+  7
+  0
+  2
+  2
+  3
+  0
+  0
+  4
+  7
+  2
+  3
+  3
+  4
+  3
+  7
+ 12
+ 11
+ 11
+  1
+  5
+  1
+  6
+  9
+  5
+ 10
+  8
+  9
+  1
+  6
+  1
+  6
+  5
+  5
+  6
+  8
+  1
+  1
+  6
+  5
+  9
+  8
+  1
+  1
+  6
+  8
+ 10
+  5
+  8
+[ CUDAIntType{66} ]
+uvm_cache_stats: [ CUDAIntType{0} ]
+output_dtype: 1
+is_experimental: 1
+Trying example: test_forward_gpu_uvm_cache_fp16(
     self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>,
-    cache_algorithm=CacheAlgorithm.LRU,
-    use_experimental_tbe=False,
+    cache_algorithm=CacheAlgorithm.LFU,
+    use_experimental_tbe=True,
 )
-PASSED
-tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp32 Trying example: test_forward_gpu_uvm_cache_fp32(
-    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp32>,
-    cache_algorithm=CacheAlgorithm.LRU,
-    use_experimental_tbe=False,
-)
-PASSED
-tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_int8 SKIPPED
+weights Parameter containing:
+tensor([[ 0.3337, -0.9902,  0.6323,  0.8267],
+        [-0.8472, -0.6284, -0.5474,  1.0391],
+        [-1.9180,  0.9551,  0.3083,  0.1508],
+        [-0.0888,  0.1538, -1.0518,  0.6260],
+        [ 0.1578, -0.1355,  0.1364, -0.2625]], device='cuda:0',
+       dtype=torch.float16, requires_grad=True) Parameter containing:
+tensor([[-0.1415,  1.2217, -1.1289,  1.1211],
+        [ 0.9663,  0.3838,  0.7861,  2.4531],
+        [-0.8804, -0.5142, -1.6641,  0.1725],
+        [ 0.5215, -0.6714,  2.5723,  0.5996],
+        [-0.0807,  0.4841,  0.1740,  1.3789],
+        [ 1.3555,  0.4866, -1.2412, -0.3535],
+        [-0.0440, -1.0791, -0.6323, -0.7217],
+        [-2.2832, -0.2576, -1.5156,  0.0723]], device='cuda:0',
+       dtype=torch.float16, requires_grad=True)
+fbgemm:tensor([[-8.4717e-01, -6.2842e-01, -5.4736e-01,  1.0391e+00, -8.0750e-02,
+          4.8413e-01,  1.7395e-01,  1.3789e+00],
+        [ 3.3374e-01, -9.9023e-01,  6.3232e-01,  8.2666e-01,  1.3555e+00,
+          4.8657e-01, -1.2412e+00, -3.5352e-01],
+        [-8.4717e-01, -6.2842e-01, -5.4736e-01,  1.0391e+00,  1.3555e+00,
+          4.8657e-01, -1.2412e+00, -3.5352e-01],
+        [ 1.5784e-01, -1.3550e-01,  1.3635e-01, -2.6245e-01, -2.2832e+00,
+         -2.5757e-01, -1.5156e+00,  7.2327e-02],
+        [ 3.3374e-01, -9.9023e-01,  6.3232e-01,  8.2666e-01, -8.8037e-01,
+         -5.1416e-01, -1.6641e+00,  1.7249e-01],
+        [-8.4717e-01, -6.2842e-01, -5.4736e-01,  1.0391e+00, -2.2832e+00,
+         -2.5757e-01, -1.5156e+00,  7.2327e-02],
+        [ 3.3374e-01, -9.9023e-01,  6.3232e-01,  8.2666e-01,  5.2148e-01,
+         -6.7139e-01,  2.5723e+00,  5.9961e-01],
+        [-8.4717e-01, -6.2842e-01, -5.4736e-01,  1.0391e+00, -4.4006e-02,
+         -1.0791e+00, -6.3232e-01, -7.2168e-01],
+        [-1.9180e+00,  9.5508e-01,  3.0835e-01,  1.5076e-01, -8.8037e-01,
+         -5.1416e-01, -1.6641e+00,  1.7249e-01],
+        [ 1.5784e-01, -1.3550e-01,  1.3635e-01, -2.6245e-01, -1.4148e-01,
+          1.2217e+00, -1.1289e+00,  1.1211e+00],
+        [-8.4717e-01, -6.2842e-01, -5.4736e-01,  1.0391e+00,  9.6631e-01,
+          3.8379e-01,  7.8613e-01,  2.4531e+00],
+        [ 3.3374e-01, -9.9023e-01,  6.3232e-01,  8.2666e-01, -4.4006e-02,
+         -1.0791e+00, -6.3232e-01, -7.2168e-01],
+        [ 1.5784e-01, -1.3550e-01,  1.3635e-01, -2.6245e-01, -2.2832e+00,
+         -2.5757e-01, -1.5156e+00,  7.2327e-02],
+        [ 1.5784e-01, -1.3550e-01,  1.3635e-01, -2.6245e-01,  5.2148e-01,
+         -6.7139e-01,  2.5723e+00,  5.9961e-01],
+        [-8.8806e-02,  1.5381e-01, -1.0518e+00,  6.2598e-01, -2.2832e+00,
+         -2.5757e-01, -1.5156e+00,  7.2327e-02],
+        [-8.8806e-02,  1.5381e-01, -1.0518e+00,  6.2598e-01,  5.2148e-01,
+         -6.7139e-01,  2.5723e+00,  5.9961e-01],
+        [-1.9180e+00,  9.5508e-01,  3.0835e-01,  1.5076e-01, -8.8037e-01,
+         -5.1416e-01, -1.6641e+00,  1.7249e-01],
+        [-8.4717e-01, -6.2842e-01, -5.4736e-01,  1.0391e+00, -8.8037e-01,
+         -5.1416e-01, -1.6641e+00,  1.7249e-01],
+        [-8.8806e-02,  1.5381e-01, -1.0518e+00,  6.2598e-01,  5.2148e-01,
+         -6.7139e-01,  2.5723e+00,  5.9961e-01],
+        [-8.4717e-01, -6.2842e-01, -5.4736e-01,  1.0391e+00,  9.6631e-01,
+          3.8379e-01,  7.8613e-01,  2.4531e+00],
+        [ 3.3374e-01, -9.9023e-01,  6.3232e-01,  8.2666e-01, -2.2832e+00,
+         -2.5757e-01, -1.5156e+00,  7.2327e-02],
+        [ 3.3374e-01, -9.9023e-01,  6.3232e-01,  8.2666e-01, -2.2832e+00,
+         -2.5757e-01, -1.5156e+00,  7.2327e-02],
+        [-1.9180e+00,  9.5508e-01,  3.0835e-01,  1.5076e-01,  5.2148e-01,
+         -6.7139e-01,  2.5723e+00,  5.9961e-01],
+        [-8.4717e-01, -6.2842e-01, -5.4736e-01,  1.0391e+00, -8.8037e-01,
+         -5.1416e-01, -1.6641e+00,  1.7249e-01],
+        [-8.4717e-01, -6.2842e-01, -5.4736e-01,  1.0391e+00, -4.4006e-02,
+         -1.0791e+00, -6.3232e-01, -7.2168e-01],
+        [ 1.5784e-01, -1.3550e-01,  1.3635e-01, -2.6245e-01,  9.6631e-01,
+          3.8379e-01,  7.8613e-01,  2.4531e+00],
+        [-8.8806e-02,  1.5381e-01, -1.0518e+00,  6.2598e-01, -2.2832e+00,
+         -2.5757e-01, -1.5156e+00,  7.2327e-02],
+        [ 3.3374e-01, -9.9023e-01,  6.3232e-01,  8.2666e-01, -2.2832e+00,
+         -2.5757e-01, -1.5156e+00,  7.2327e-02],
+        [-1.9180e+00,  9.5508e-01,  3.0835e-01,  1.5076e-01,  5.2148e-01,
+         -6.7139e-01,  2.5723e+00,  5.9961e-01],
+        [-1.9180e+00,  9.5508e-01,  3.0835e-01,  1.5076e-01,  9.6631e-01,
+          3.8379e-01,  7.8613e-01,  2.4531e+00],
+        [ 1.5784e-01, -1.3550e-01,  1.3635e-01, -2.6245e-01, -1.4148e-01,
+          1.2217e+00, -1.1289e+00,  1.1211e+00],
+        [-1.9180e+00,  9.5508e-01,  3.0835e-01,  1.5076e-01, -8.8037e-01,
+         -5.1416e-01, -1.6641e+00,  1.7249e-01],
+        [-5.1200e+02, -1.4268e+00,  0.0000e+00,  1.5283e+00,  5.1200e+02,
+          1.8662e+00,  0.0000e+00,  1.6914e+00]], device='cuda:0',
+       dtype=torch.float16, grad_fn=<CppNode<SplitLookupFunction_sgd_Op>>)
+pytorch:tensor([[-0.8472, -0.6284, -0.5474,  1.0391, -0.0807,  0.4841,  0.1740,  1.3789],
+        [ 0.3337, -0.9902,  0.6323,  0.8267,  1.3555,  0.4866, -1.2412, -0.3535],
+        [-0.8472, -0.6284, -0.5474,  1.0391,  1.3555,  0.4866, -1.2412, -0.3535],
+        [ 0.1578, -0.1355,  0.1364, -0.2625, -2.2832, -0.2576, -1.5156,  0.0723],
+        [ 0.3337, -0.9902,  0.6323,  0.8267, -0.8804, -0.5142, -1.6641,  0.1725],
+        [-0.8472, -0.6284, -0.5474,  1.0391, -2.2832, -0.2576, -1.5156,  0.0723],
+        [ 0.3337, -0.9902,  0.6323,  0.8267,  0.5215, -0.6714,  2.5723,  0.5996],
+        [-0.8472, -0.6284, -0.5474,  1.0391, -0.0440, -1.0791, -0.6323, -0.7217],
+        [-1.9180,  0.9551,  0.3083,  0.1508, -0.8804, -0.5142, -1.6641,  0.1725],
+        [ 0.1578, -0.1355,  0.1364, -0.2625, -0.1415,  1.2217, -1.1289,  1.1211],
+        [-0.8472, -0.6284, -0.5474,  1.0391,  0.9663,  0.3838,  0.7861,  2.4531],
+        [ 0.3337, -0.9902,  0.6323,  0.8267, -0.0440, -1.0791, -0.6323, -0.7217],
+        [ 0.1578, -0.1355,  0.1364, -0.2625, -2.2832, -0.2576, -1.5156,  0.0723],
+        [ 0.1578, -0.1355,  0.1364, -0.2625,  0.5215, -0.6714,  2.5723,  0.5996],
+        [-0.0888,  0.1538, -1.0518,  0.6260, -2.2832, -0.2576, -1.5156,  0.0723],
+        [-0.0888,  0.1538, -1.0518,  0.6260,  0.5215, -0.6714,  2.5723,  0.5996],
+        [-1.9180,  0.9551,  0.3083,  0.1508, -0.8804, -0.5142, -1.6641,  0.1725],
+        [-0.8472, -0.6284, -0.5474,  1.0391, -0.8804, -0.5142, -1.6641,  0.1725],
+        [-0.0888,  0.1538, -1.0518,  0.6260,  0.5215, -0.6714,  2.5723,  0.5996],
+        [-0.8472, -0.6284, -0.5474,  1.0391,  0.9663,  0.3838,  0.7861,  2.4531],
+        [ 0.3337, -0.9902,  0.6323,  0.8267, -2.2832, -0.2576, -1.5156,  0.0723],
+        [ 0.3337, -0.9902,  0.6323,  0.8267, -2.2832, -0.2576, -1.5156,  0.0723],
+        [-1.9180,  0.9551,  0.3083,  0.1508,  0.5215, -0.6714,  2.5723,  0.5996],
+        [-0.8472, -0.6284, -0.5474,  1.0391, -0.8804, -0.5142, -1.6641,  0.1725],
+        [-0.8472, -0.6284, -0.5474,  1.0391, -0.0440, -1.0791, -0.6323, -0.7217],
+        [ 0.1578, -0.1355,  0.1364, -0.2625,  0.9663,  0.3838,  0.7861,  2.4531],
+        [-0.0888,  0.1538, -1.0518,  0.6260, -2.2832, -0.2576, -1.5156,  0.0723],
+        [ 0.3337, -0.9902,  0.6323,  0.8267, -2.2832, -0.2576, -1.5156,  0.0723],
+        [-1.9180,  0.9551,  0.3083,  0.1508,  0.5215, -0.6714,  2.5723,  0.5996],
+        [-1.9180,  0.9551,  0.3083,  0.1508,  0.9663,  0.3838,  0.7861,  2.4531],
+        [ 0.1578, -0.1355,  0.1364, -0.2625, -0.1415,  1.2217, -1.1289,  1.1211],
+        [-1.9180,  0.9551,  0.3083,  0.1508, -0.8804, -0.5142, -1.6641,  0.1725],
+        [-0.0888,  0.1538, -1.0518,  0.6260,  0.9663,  0.3838,  0.7861,  2.4531]],
+       device='cuda:0', dtype=torch.float16, grad_fn=<CatBackward0>)
+self = <tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>
+cache_algorithm = <CacheAlgorithm.LFU: 1>, use_experimental_tbe = True
 
+    @unittest.skipIf(*gpu_unavailable)
+    @given(
+        cache_algorithm=st.just(CacheAlgorithm.LFU),
+        use_experimental_tbe=st.just(True),
+    )
+    @settings(
+        verbosity=VERBOSITY,
+        max_examples=MAX_EXAMPLES_LONG_RUNNING,
+        deadline=None,
+        suppress_health_check=[HealthCheck.filter_too_much, HealthCheck.data_too_large],
+    )
+    def test_forward_gpu_uvm_cache_fp16(
+        self,
+        cache_algorithm: CacheAlgorithm,
+        use_experimental_tbe: bool,
+    ) -> None:
+        weights_precision = SparseType.FP16
+        use_cpu = False
+        T = 2#random.randint(1, 10)
+        D = 4#random.randint(2, 256)
+        B = 33#random.randint(1, 128)
+        L = 1#random.randint(0, 20)
+        log_E = 1#random.randint(3, 5)
+    
+        use_cache = True
+    
+        pooling_mode = random.choice(
+            [
+                PoolingMode.SUM,
+                PoolingMode.MEAN,
+            ]
+            + ([PoolingMode.NONE] if not use_experimental_tbe else [])
+        )
+        output_dtype = random.choice(
+            [
+                SparseType.FP32,
+                SparseType.FP16,
+                SparseType.BF16,
+            ]
+        )
+        if pooling_mode == PoolingMode.NONE:
+            mixed = False
+            mixed_B = False
+        else:
+            mixed = random.choice([True, False])
+            mixed_B = (
+                random.choice([True, False]) if not use_experimental_tbe else False
+            )
+        if pooling_mode == PoolingMode.SUM:
+            weighted = random.choice([True, False])
+        else:
+            weighted = False
+>       self.execute_forward_(
+            T,
+            D,
+            B,
+            log_E,
+            L,
+            weights_precision,
+            weighted,
+            mixed,
+            mixed_B,
+            use_cache,
+            cache_algorithm,
+            pooling_mode,
+            use_cpu,
+            output_dtype,
+            use_experimental_tbe,
+        )
+
+tbe/training/forward_test.py:722: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>
+T = 2, D = 4, B = 33, log_E = 1, L = 1
+weights_precision = <SparseType.FP16: 'fp16'>, weighted = False, mixed = True
+mixed_B = False, use_cache = True, cache_algorithm = <CacheAlgorithm.LFU: 1>
+pooling_mode = <PoolingMode.MEAN: 1>, use_cpu = False
+output_dtype = <SparseType.FP16: 'fp16'>, use_experimental_tbe = True
+
+    def execute_forward_(  # noqa C901
+        self,
+        T: int,
+        D: int,
+        B: int,
+        log_E: int,
+        L: int,
+        weights_precision: SparseType,
+        weighted: bool,
+        mixed: bool,
+        mixed_B: bool,
+        use_cache: bool,
+        cache_algorithm: CacheAlgorithm,
+        pooling_mode: PoolingMode,
+        use_cpu: bool,
+        output_dtype: SparseType,
+        use_experimental_tbe: bool,
+    ) -> None:
+        # NOTE: cache is not applicable to CPU version.
+        assume(not use_cpu or not use_cache)
+        # NOTE: limit (T * B * L * D) to avoid timeout for CPU version!
+        assume(not use_cpu or T * B * L * D <= 2048)
+        # NOTE: CPU does not support FP16.
+        assume(not (use_cpu and weights_precision == SparseType.FP16))
+    
+        # NOTE: weighted operation can be done only for SUM.
+        assume(pooling_mode == PoolingMode.SUM or not weighted)
+        # NOTE: No bag ops only work on GPUs, no mixed
+        assume(not use_cpu or pooling_mode != PoolingMode.NONE)
+        assume(not mixed or pooling_mode != PoolingMode.NONE)
+        # TODO: Support these cases
+        assume(
+            not mixed_B
+            or (
+                weights_precision != SparseType.INT8
+                and output_dtype != SparseType.INT8
+                and pooling_mode != PoolingMode.NONE
+            )
+        )
+    
+        emb_op = SplitTableBatchedEmbeddingBagsCodegen
+        if pooling_mode == PoolingMode.SUM:
+            mode = "sum"
+            do_pooling = True
+        elif pooling_mode == PoolingMode.MEAN:
+            mode = "mean"
+            do_pooling = True
+        elif pooling_mode == PoolingMode.NONE:
+            mode = "sum"
+            do_pooling = False
+        else:
+            # This proves that we have exhaustively checked all PoolingModes
+            raise RuntimeError("Unknown PoolingMode!")
+    
+        E = int(10**log_E)
+        if use_cpu:
+            D = (D + 15) // 16 * 4
+        else:
+            D = D
+        if not mixed:
+            Ds = [D] * T
+            Es = [E] * T
+        else:
+            Ds = [
+                round_up(np.random.randint(low=int(0.25 * D), high=int(1.0 * D)), 4)
+                for _ in range(T)
+            ]
+            Es = [
+                np.random.randint(low=int(0.5 * E), high=int(2.0 * E)) for _ in range(T)
+            ]
+    
+        if not mixed_B:
+            Bs = [B] * T
+            Bs_rank_feature = [[0]]
+        else:
+            Bs_rank_feature, Bs = gen_mixed_B_batch_sizes(B, T)
+    
+        compute_device = ComputeDevice.CUDA
+        if use_cpu:
+            managed = [EmbeddingLocation.HOST] * T
+            compute_device = ComputeDevice.CPU
+        elif TEST_WITH_ROCM:
+            # ROCm managed memory allocation is under development
+            managed = [EmbeddingLocation.DEVICE] * T
+        elif use_cache:
+            managed = [EmbeddingLocation.MANAGED_CACHING] * T
+            if mixed:
+                average_D = sum(Ds) // T
+                for t, d in enumerate(Ds):
+                    managed[t] = (
+                        EmbeddingLocation.DEVICE if d < average_D else managed[t]
+                    )
+        else:
+            managed = [
+                np.random.choice(
+                    [
+                        EmbeddingLocation.DEVICE,
+                        # EmbeddingLocation.MANAGED,
+                    ]
+                )
+                for _ in range(T)
+            ]
+        if do_pooling:
+            bs = [
+                to_device(torch.nn.EmbeddingBag(E, D, mode=mode, sparse=True), use_cpu)
+                for (E, D) in zip(Es, Ds)
+            ]
+        else:
+            bs = [
+                to_device(torch.nn.Embedding(E, D, sparse=True), use_cpu)
+                for (E, D) in zip(Es, Ds)
+            ]
+        if weights_precision == SparseType.INT8:
+            for t in range(T):
+                bs[t].weight.data.copy_(
+                    torch.ops.fbgemm.Fused8BitRowwiseQuantizedToFloat(
+                        torch.ops.fbgemm.FloatToFused8BitRowwiseQuantized(
+                            bs[t].weight.data
+                        )
+                    )
+                )
+    
+        if weights_precision == SparseType.FP16:
+            bs = [b.half() for b in bs]
+    
+        # Generate indices
+        xs = [
+            to_device(torch.randint(low=0, high=e, size=(b, L)), use_cpu)
+            for e, b in zip(Es, Bs)
+        ]
+        # Generate positional weights
+        xws = [to_device(torch.randn(size=(b, L)), use_cpu) for b in Bs]
+        if weights_precision == SparseType.FP16:
+            xws = [xw.half() for xw in xws]
+    
+        # Run baseline
+        fs = (
+            [
+                b_indices(b, x, use_cpu=use_cpu, do_pooling=do_pooling)
+                for (b, x) in zip(bs, xs)
+            ]
+            if not weighted
+            else [
+                b_indices(
+                    b,
+                    x,
+                    per_sample_weights=xw.view(-1),
+                    use_cpu=use_cpu,
+                    do_pooling=do_pooling,
+                )
+                for (b, x, xw) in zip(bs, xs, xws)
+            ]
+        )
+    
+        if do_pooling:
+            if mixed_B:
+                f = format_ref_tensors_in_mixed_B_layout(fs, Bs_rank_feature)
+            else:
+                f = torch.cat([f.view(B, -1) for f in fs], dim=1)
+        else:
+            f = torch.cat(fs, dim=0).view(-1, D)
+    
+        # Create a TBE op
+        cc = emb_op(
+            embedding_specs=[
+                (
+                    E,
+                    D,
+                    EmbeddingLocation(M),
+                    compute_device,
+                )
+                for (E, D, M) in zip(Es, Ds, managed)
+            ],
+            weights_precision=weights_precision,
+            optimizer=(
+                OptimType.EXACT_ROWWISE_ADAGRAD if mixed_B else OptimType.EXACT_SGD
+            ),
+            learning_rate=0.05,
+            cache_algorithm=cache_algorithm,
+            pooling_mode=pooling_mode,
+            output_dtype=output_dtype,
+            use_experimental_tbe=use_experimental_tbe,
+        )
+    
+        if not use_cpu and torch.cuda.is_available():
+            # NOTE: Test TorchScript-compatible!
+            try:
+                # Occasionally, we run into the following error when running
+                # against PyTorch nightly:
+                #
+                # RuntimeError: Can't redefine method:
+                # forward on class: __torch__.fbgemm_gpu.split_table_batched_embeddings_ops_training.___torch_mangle_0.SplitTableBatchedEmbeddingBagsCodegen (of Python compilation unit at: 0x5e74890)
+                cc = torch.jit.script(cc)
+            except Exception as e:
+                print(f"Torch JIT compilation failed: {e}")
+        # print("========================")
+    
+        for t in range(T):
+            cc.split_embedding_weights()[t].data.copy_(
+                bs[t].weight
+                if weights_precision != SparseType.INT8
+                else torch.ops.fbgemm.FloatToFused8BitRowwiseQuantized(bs[t].weight)
+            )
+        print("weights", bs[0].weight, bs[1].weight)
+        x = torch.cat([x.contiguous().flatten() for x in xs], dim=0)
+        xw = torch.cat([xw.contiguous().flatten() for xw in xws], dim=0)
+    
+        (indices, offsets) = get_table_batched_offsets_from_dense(
+            x, L, sum(Bs), use_cpu
+        )
+    
+        batch_size_per_feature_per_rank = Bs_rank_feature if mixed_B else None
+    
+        # Run TBE
+        from rpdTracerControl import rpdTracerControl
+        profile = rpdTracerControl()      #######
+        profile.setPythonTrace(True)
+        prof = torch.autograd.profiler.emit_nvtx(record_shapes=True)
+    
+        profile.start()
+        prof.__enter__()
+    
+        fc2 = (
+            cc(
+                indices,
+                offsets,
+                batch_size_per_feature_per_rank=batch_size_per_feature_per_rank,
+            )
+            if not weighted
+            else cc(
+                indices,
+                offsets,
+                to_device(xw.contiguous().view(-1), use_cpu),
+                batch_size_per_feature_per_rank=batch_size_per_feature_per_rank,
+            )
+        )
+        prof.__exit__(None, None, None)
+        profile.stop()
+    
+        # Compare results: f = baseline, fc2 = TBE
+        tolerance = (
+            1.0e-5
+            if weights_precision == SparseType.FP32 and output_dtype == SparseType.FP32
+            else 8.0e-3
+        )
+        torch.set_printoptions(profile="full")
+        print(f"fbgemm:{fc2}")
+        print(f"pytorch:{f}")
+>       torch.testing.assert_close(
+            fc2.float(), f.float(), atol=tolerance, rtol=tolerance
+        )
+E       AssertionError: Tensor-likes are not close!
+E       
+E       Mismatched elements: 8 / 264 (3.0%)
+E       Greatest absolute difference: 511.91119384765625 at index (32, 0) (up to 0.008 allowed)
+E       Greatest relative difference: 5764.3662109375 at index (32, 0) (up to 0.008 allowed)
+
+tbe/training/forward_test.py:333: AssertionError
+dev_weights: [ CUDAHalfType{0} ]
+uvm_weights:  1.5137
+-0.3352
+ 1.2285
+-0.2666
+ 0.5879
+ 0.7197
+ 1.6934
+-1.1035
+ 0.7393
+-2.3320
+ 0.0297
+-1.0938
+ 0.2454
+ 0.0631
+-0.7280
+ 0.2788
+ 0.5190
+ 0.5996
+-0.4993
+ 0.9536
+-0.3999
+-2.4980
+-0.5630
+ 1.1367
+ 0.0635
+-0.0825
+ 0.2401
+-1.6631
+ 0.1185
+-0.7017
+-0.0451
+ 1.6885
+ 0.5249
+ 0.4021
+-1.0508
+ 1.0361
+-0.5947
+ 1.3096
+ 0.9746
+ 1.2012
+-0.0911
+ 0.9263
+-0.9019
+-0.5249
+-2.4668
+ 0.6841
+-0.0710
+ 2.2930
+ 1.1475
+ 1.1035
+ 0.5562
+ 0.8550
+[ CUDAHalfType{52} ]
+lxu_cache_weights:  0.5879  0.7197  1.6934 -1.1035
+ 0.7393 -2.3320  0.0297 -1.0938
+ 0.5190  0.5996 -0.4993  0.9536
+ 0.1185 -0.7017 -0.0451  1.6885
+ 0.2454  0.0631 -0.7280  0.2788
+-0.3999 -2.4980 -0.5630  1.1367
+-0.0911  0.9263 -0.9019 -0.5249
+-2.4668  0.6841 -0.0710  2.2930
+ 1.1475  1.1035  0.5562  0.8550
+ 1.5137 -0.3352  1.2285 -0.2666
+-0.5947  1.3096  0.9746  1.2012
+ 0.0635 -0.0825  0.2401 -1.6631
+ 0.5249  0.4021 -1.0508  1.0361
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+ 0.0000  0.0000  0.0000  0.0000
+[ CUDAFloatType{64,4} ]
+weights_placements:  2
+ 2
+[ CUDAIntType{2} ]
+weights_offsets:   0
+ 20
+[ CUDALongType{2} ]
+D_offsets:  0
+ 4
+ 8
+[ CUDAIntType{3} ]
+total_D: 8
+max_D: 4
+indices:  3
+ 4
+ 1
+ 2
+ 4
+ 0
+ 3
+ 1
+ 4
+ 2
+ 0
+ 1
+ 4
+ 0
+ 2
+ 1
+ 4
+ 4
+ 2
+ 2
+ 1
+ 1
+ 3
+ 0
+ 2
+ 1
+ 3
+ 4
+ 3
+ 4
+ 2
+ 1
+ 2
+ 2
+ 7
+ 5
+ 0
+ 2
+ 6
+ 0
+ 0
+ 5
+ 7
+ 5
+ 0
+ 5
+ 6
+ 7
+ 1
+ 0
+ 4
+ 4
+ 2
+ 7
+ 4
+ 6
+ 2
+ 5
+ 3
+ 6
+ 4
+ 6
+ 7
+ 2
+ 2
+ 1
+[ CUDALongType{66} ]
+offsets:   0
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+[ CUDALongType{67} ]
+pooling_mode: 1
+lxu_cache_locations:   4
+  2
+  0
+  1
+  2
+  9
+  4
+  0
+  2
+  1
+  9
+  0
+  2
+  9
+  1
+  0
+  2
+  2
+  1
+  1
+  0
+  0
+  4
+  9
+  1
+  0
+  4
+  2
+  4
+  2
+  1
+  0
+  1
+  3
+  8
+  6
+  5
+  3
+  7
+  5
+  5
+  6
+  8
+  6
+  5
+  6
+  7
+  8
+ 11
+  5
+ 10
+ 10
+  3
+  8
+ 10
+  7
+  3
+  6
+ 12
+  7
+ 10
+  7
+  8
+  3
+  3
+ 11
+[ CUDAIntType{66} ]
+uvm_cache_stats: [ CUDAIntType{0} ]
+output_dtype: 1
+is_experimental: 1
+
+weights Parameter containing:
+tensor([[ 1.5137, -0.3352,  1.2285, -0.2666],
+        [ 0.5879,  0.7197,  1.6934, -1.1035],
+        [ 0.7393, -2.3320,  0.0297, -1.0938],
+        [ 0.2454,  0.0631, -0.7280,  0.2788],
+        [ 0.5190,  0.5996, -0.4993,  0.9536]], device='cuda:0',
+       dtype=torch.float16, requires_grad=True) Parameter containing:
+tensor([[-0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.0635, -0.0825,  0.2401, -1.6631],
+        [ 0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.5249,  0.4021, -1.0508,  1.0361],
+        [-0.5947,  1.3096,  0.9746,  1.2012],
+        [-0.0911,  0.9263, -0.9019, -0.5249],
+        [-2.4668,  0.6841, -0.0710,  2.2930],
+        [ 1.1475,  1.1035,  0.5562,  0.8550]], device='cuda:0',
+       dtype=torch.float16, requires_grad=True)
+fbgemm:tensor([[ 0.2454,  0.0631, -0.7280,  0.2788,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.5190,  0.5996, -0.4993,  0.9536,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 0.5879,  0.7197,  1.6934, -1.1035, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 0.7393, -2.3320,  0.0297, -1.0938, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5190,  0.5996, -0.4993,  0.9536,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 1.5137, -0.3352,  1.2285, -0.2666, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 0.2454,  0.0631, -0.7280,  0.2788, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5879,  0.7197,  1.6934, -1.1035, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 0.7393, -2.3320,  0.0297, -1.0938,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 1.5137, -0.3352,  1.2285, -0.2666, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 0.5879,  0.7197,  1.6934, -1.1035, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 1.5137, -0.3352,  1.2285, -0.2666, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 0.7393, -2.3320,  0.0297, -1.0938,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 0.5879,  0.7197,  1.6934, -1.1035,  0.0635, -0.0825,  0.2401, -1.6631],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.5947,  1.3096,  0.9746,  1.2012],
+        [ 0.7393, -2.3320,  0.0297, -1.0938, -0.5947,  1.3096,  0.9746,  1.2012],
+        [ 0.7393, -2.3320,  0.0297, -1.0938,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.5879,  0.7197,  1.6934, -1.1035,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 0.5879,  0.7197,  1.6934, -1.1035, -0.5947,  1.3096,  0.9746,  1.2012],
+        [ 0.2454,  0.0631, -0.7280,  0.2788, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 1.5137, -0.3352,  1.2285, -0.2666,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.7393, -2.3320,  0.0297, -1.0938, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 0.5879,  0.7197,  1.6934, -1.1035,  0.5249,  0.4021, -1.0508,  1.0361],
+        [ 0.2454,  0.0631, -0.7280,  0.2788, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.5947,  1.3096,  0.9746,  1.2012],
+        [ 0.2454,  0.0631, -0.7280,  0.2788, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 0.5190,  0.5996, -0.4993,  0.9536,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 0.7393, -2.3320,  0.0297, -1.0938,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.5879,  0.7197,  1.6934, -1.1035,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 2.0000,  1.8096,  2.0000, -2.0410,  0.0000,  1.3770,  0.0000, -1.4150]],
+       device='cuda:0', dtype=torch.float16,
+       grad_fn=<CppNode<SplitLookupFunction_sgd_Op>>)
+pytorch:tensor([[ 0.2454,  0.0631, -0.7280,  0.2788,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.5190,  0.5996, -0.4993,  0.9536,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 0.5879,  0.7197,  1.6934, -1.1035, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 0.7393, -2.3320,  0.0297, -1.0938, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5190,  0.5996, -0.4993,  0.9536,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 1.5137, -0.3352,  1.2285, -0.2666, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 0.2454,  0.0631, -0.7280,  0.2788, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5879,  0.7197,  1.6934, -1.1035, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 0.7393, -2.3320,  0.0297, -1.0938,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 1.5137, -0.3352,  1.2285, -0.2666, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 0.5879,  0.7197,  1.6934, -1.1035, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 1.5137, -0.3352,  1.2285, -0.2666, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 0.7393, -2.3320,  0.0297, -1.0938,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 0.5879,  0.7197,  1.6934, -1.1035,  0.0635, -0.0825,  0.2401, -1.6631],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.3999, -2.4980, -0.5630,  1.1367],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.5947,  1.3096,  0.9746,  1.2012],
+        [ 0.7393, -2.3320,  0.0297, -1.0938, -0.5947,  1.3096,  0.9746,  1.2012],
+        [ 0.7393, -2.3320,  0.0297, -1.0938,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.5879,  0.7197,  1.6934, -1.1035,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 0.5879,  0.7197,  1.6934, -1.1035, -0.5947,  1.3096,  0.9746,  1.2012],
+        [ 0.2454,  0.0631, -0.7280,  0.2788, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 1.5137, -0.3352,  1.2285, -0.2666,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.7393, -2.3320,  0.0297, -1.0938, -0.0911,  0.9263, -0.9019, -0.5249],
+        [ 0.5879,  0.7197,  1.6934, -1.1035,  0.5249,  0.4021, -1.0508,  1.0361],
+        [ 0.2454,  0.0631, -0.7280,  0.2788, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 0.5190,  0.5996, -0.4993,  0.9536, -0.5947,  1.3096,  0.9746,  1.2012],
+        [ 0.2454,  0.0631, -0.7280,  0.2788, -2.4668,  0.6841, -0.0710,  2.2930],
+        [ 0.5190,  0.5996, -0.4993,  0.9536,  1.1475,  1.1035,  0.5562,  0.8550],
+        [ 0.7393, -2.3320,  0.0297, -1.0938,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.5879,  0.7197,  1.6934, -1.1035,  0.1185, -0.7017, -0.0451,  1.6885],
+        [ 0.7393, -2.3320,  0.0297, -1.0938,  0.0635, -0.0825,  0.2401, -1.6631]],
+       device='cuda:0', dtype=torch.float16, grad_fn=<CatBackward0>)
+FAILED
+
+=================================== FAILURES ===================================
+_________________ ForwardTest.test_forward_gpu_uvm_cache_fp16 __________________
+
+self = <tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>
+
+    @unittest.skipIf(*gpu_unavailable)
+>   @given(
+        cache_algorithm=st.just(CacheAlgorithm.LFU),
+        use_experimental_tbe=st.just(True),
+    )
+
+tbe/training/forward_test.py:671: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tbe/training/forward_test.py:722: in test_forward_gpu_uvm_cache_fp16
+    self.execute_forward_(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>
+T = 2, D = 4, B = 33, log_E = 1, L = 1
+weights_precision = <SparseType.FP16: 'fp16'>, weighted = False, mixed = True
+mixed_B = False, use_cache = True, cache_algorithm = <CacheAlgorithm.LFU: 1>
+pooling_mode = <PoolingMode.MEAN: 1>, use_cpu = False
+output_dtype = <SparseType.FP16: 'fp16'>, use_experimental_tbe = True
+
+    def execute_forward_(  # noqa C901
+        self,
+        T: int,
+        D: int,
+        B: int,
+        log_E: int,
+        L: int,
+        weights_precision: SparseType,
+        weighted: bool,
+        mixed: bool,
+        mixed_B: bool,
+        use_cache: bool,
+        cache_algorithm: CacheAlgorithm,
+        pooling_mode: PoolingMode,
+        use_cpu: bool,
+        output_dtype: SparseType,
+        use_experimental_tbe: bool,
+    ) -> None:
+        # NOTE: cache is not applicable to CPU version.
+        assume(not use_cpu or not use_cache)
+        # NOTE: limit (T * B * L * D) to avoid timeout for CPU version!
+        assume(not use_cpu or T * B * L * D <= 2048)
+        # NOTE: CPU does not support FP16.
+        assume(not (use_cpu and weights_precision == SparseType.FP16))
+    
+        # NOTE: weighted operation can be done only for SUM.
+        assume(pooling_mode == PoolingMode.SUM or not weighted)
+        # NOTE: No bag ops only work on GPUs, no mixed
+        assume(not use_cpu or pooling_mode != PoolingMode.NONE)
+        assume(not mixed or pooling_mode != PoolingMode.NONE)
+        # TODO: Support these cases
+        assume(
+            not mixed_B
+            or (
+                weights_precision != SparseType.INT8
+                and output_dtype != SparseType.INT8
+                and pooling_mode != PoolingMode.NONE
+            )
+        )
+    
+        emb_op = SplitTableBatchedEmbeddingBagsCodegen
+        if pooling_mode == PoolingMode.SUM:
+            mode = "sum"
+            do_pooling = True
+        elif pooling_mode == PoolingMode.MEAN:
+            mode = "mean"
+            do_pooling = True
+        elif pooling_mode == PoolingMode.NONE:
+            mode = "sum"
+            do_pooling = False
+        else:
+            # This proves that we have exhaustively checked all PoolingModes
+            raise RuntimeError("Unknown PoolingMode!")
+    
+        E = int(10**log_E)
+        if use_cpu:
+            D = (D + 15) // 16 * 4
+        else:
+            D = D
+        if not mixed:
+            Ds = [D] * T
+            Es = [E] * T
+        else:
+            Ds = [
+                round_up(np.random.randint(low=int(0.25 * D), high=int(1.0 * D)), 4)
+                for _ in range(T)
+            ]
+            Es = [
+                np.random.randint(low=int(0.5 * E), high=int(2.0 * E)) for _ in range(T)
+            ]
+    
+        if not mixed_B:
+            Bs = [B] * T
+            Bs_rank_feature = [[0]]
+        else:
+            Bs_rank_feature, Bs = gen_mixed_B_batch_sizes(B, T)
+    
+        compute_device = ComputeDevice.CUDA
+        if use_cpu:
+            managed = [EmbeddingLocation.HOST] * T
+            compute_device = ComputeDevice.CPU
+        elif TEST_WITH_ROCM:
+            # ROCm managed memory allocation is under development
+            managed = [EmbeddingLocation.DEVICE] * T
+        elif use_cache:
+            managed = [EmbeddingLocation.MANAGED_CACHING] * T
+            if mixed:
+                average_D = sum(Ds) // T
+                for t, d in enumerate(Ds):
+                    managed[t] = (
+                        EmbeddingLocation.DEVICE if d < average_D else managed[t]
+                    )
+        else:
+            managed = [
+                np.random.choice(
+                    [
+                        EmbeddingLocation.DEVICE,
+                        # EmbeddingLocation.MANAGED,
+                    ]
+                )
+                for _ in range(T)
+            ]
+        if do_pooling:
+            bs = [
+                to_device(torch.nn.EmbeddingBag(E, D, mode=mode, sparse=True), use_cpu)
+                for (E, D) in zip(Es, Ds)
+            ]
+        else:
+            bs = [
+                to_device(torch.nn.Embedding(E, D, sparse=True), use_cpu)
+                for (E, D) in zip(Es, Ds)
+            ]
+        if weights_precision == SparseType.INT8:
+            for t in range(T):
+                bs[t].weight.data.copy_(
+                    torch.ops.fbgemm.Fused8BitRowwiseQuantizedToFloat(
+                        torch.ops.fbgemm.FloatToFused8BitRowwiseQuantized(
+                            bs[t].weight.data
+                        )
+                    )
+                )
+    
+        if weights_precision == SparseType.FP16:
+            bs = [b.half() for b in bs]
+    
+        # Generate indices
+        xs = [
+            to_device(torch.randint(low=0, high=e, size=(b, L)), use_cpu)
+            for e, b in zip(Es, Bs)
+        ]
+        # Generate positional weights
+        xws = [to_device(torch.randn(size=(b, L)), use_cpu) for b in Bs]
+        if weights_precision == SparseType.FP16:
+            xws = [xw.half() for xw in xws]
+    
+        # Run baseline
+        fs = (
+            [
+                b_indices(b, x, use_cpu=use_cpu, do_pooling=do_pooling)
+                for (b, x) in zip(bs, xs)
+            ]
+            if not weighted
+            else [
+                b_indices(
+                    b,
+                    x,
+                    per_sample_weights=xw.view(-1),
+                    use_cpu=use_cpu,
+                    do_pooling=do_pooling,
+                )
+                for (b, x, xw) in zip(bs, xs, xws)
+            ]
+        )
+    
+        if do_pooling:
+            if mixed_B:
+                f = format_ref_tensors_in_mixed_B_layout(fs, Bs_rank_feature)
+            else:
+                f = torch.cat([f.view(B, -1) for f in fs], dim=1)
+        else:
+            f = torch.cat(fs, dim=0).view(-1, D)
+    
+        # Create a TBE op
+        cc = emb_op(
+            embedding_specs=[
+                (
+                    E,
+                    D,
+                    EmbeddingLocation(M),
+                    compute_device,
+                )
+                for (E, D, M) in zip(Es, Ds, managed)
+            ],
+            weights_precision=weights_precision,
+            optimizer=(
+                OptimType.EXACT_ROWWISE_ADAGRAD if mixed_B else OptimType.EXACT_SGD
+            ),
+            learning_rate=0.05,
+            cache_algorithm=cache_algorithm,
+            pooling_mode=pooling_mode,
+            output_dtype=output_dtype,
+            use_experimental_tbe=use_experimental_tbe,
+        )
+    
+        if not use_cpu and torch.cuda.is_available():
+            # NOTE: Test TorchScript-compatible!
+            try:
+                # Occasionally, we run into the following error when running
+                # against PyTorch nightly:
+                #
+                # RuntimeError: Can't redefine method:
+                # forward on class: __torch__.fbgemm_gpu.split_table_batched_embeddings_ops_training.___torch_mangle_0.SplitTableBatchedEmbeddingBagsCodegen (of Python compilation unit at: 0x5e74890)
+                cc = torch.jit.script(cc)
+            except Exception as e:
+                print(f"Torch JIT compilation failed: {e}")
+        # print("========================")
+    
+        for t in range(T):
+            cc.split_embedding_weights()[t].data.copy_(
+                bs[t].weight
+                if weights_precision != SparseType.INT8
+                else torch.ops.fbgemm.FloatToFused8BitRowwiseQuantized(bs[t].weight)
+            )
+        print("weights", bs[0].weight, bs[1].weight)
+        x = torch.cat([x.contiguous().flatten() for x in xs], dim=0)
+        xw = torch.cat([xw.contiguous().flatten() for xw in xws], dim=0)
+    
+        (indices, offsets) = get_table_batched_offsets_from_dense(
+            x, L, sum(Bs), use_cpu
+        )
+    
+        batch_size_per_feature_per_rank = Bs_rank_feature if mixed_B else None
+    
+        # Run TBE
+        from rpdTracerControl import rpdTracerControl
+        profile = rpdTracerControl()      #######
+        profile.setPythonTrace(True)
+        prof = torch.autograd.profiler.emit_nvtx(record_shapes=True)
+    
+        profile.start()
+        prof.__enter__()
+    
+        fc2 = (
+            cc(
+                indices,
+                offsets,
+                batch_size_per_feature_per_rank=batch_size_per_feature_per_rank,
+            )
+            if not weighted
+            else cc(
+                indices,
+                offsets,
+                to_device(xw.contiguous().view(-1), use_cpu),
+                batch_size_per_feature_per_rank=batch_size_per_feature_per_rank,
+            )
+        )
+        prof.__exit__(None, None, None)
+        profile.stop()
+    
+        # Compare results: f = baseline, fc2 = TBE
+        tolerance = (
+            1.0e-5
+            if weights_precision == SparseType.FP32 and output_dtype == SparseType.FP32
+            else 8.0e-3
+        )
+        torch.set_printoptions(profile="full")
+        print(f"fbgemm:{fc2}")
+        print(f"pytorch:{f}")
+>       torch.testing.assert_close(
+            fc2.float(), f.float(), atol=tolerance, rtol=tolerance
+        )
+E       AssertionError: Tensor-likes are not close!
+E       
+E       Mismatched elements: 8 / 264 (3.0%)
+E       Greatest absolute difference: 4.1416015625 at index (32, 1) (up to 0.008 allowed)
+E       Greatest relative difference: 66.25090026855469 at index (32, 2) (up to 0.008 allowed)
+E       Falsifying example: test_forward_gpu_uvm_cache_fp16(
+E           self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>,
+E           cache_algorithm=CacheAlgorithm.LFU,
+E           use_experimental_tbe=True,
+E       )
+E       
+E       You can reproduce this example by temporarily adding @reproduce_failure('6.115.0', b'AA==') as a decorator on your test case
+
+tbe/training/forward_test.py:333: AssertionError
+---------------------------------- Hypothesis ----------------------------------
+Trying example: test_forward_gpu_uvm_cache_fp16(
+    self=<tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>,
+    cache_algorithm=CacheAlgorithm.LFU,
+    use_experimental_tbe=True,
+)
+self = <tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>
+cache_algorithm = <CacheAlgorithm.LFU: 1>, use_experimental_tbe = True
+
+    @unittest.skipIf(*gpu_unavailable)
+    @given(
+        cache_algorithm=st.just(CacheAlgorithm.LFU),
+        use_experimental_tbe=st.just(True),
+    )
+    @settings(
+        verbosity=VERBOSITY,
+        max_examples=MAX_EXAMPLES_LONG_RUNNING,
+        deadline=None,
+        suppress_health_check=[HealthCheck.filter_too_much, HealthCheck.data_too_large],
+    )
+    def test_forward_gpu_uvm_cache_fp16(
+        self,
+        cache_algorithm: CacheAlgorithm,
+        use_experimental_tbe: bool,
+    ) -> None:
+        weights_precision = SparseType.FP16
+        use_cpu = False
+        T = 2#random.randint(1, 10)
+        D = 4#random.randint(2, 256)
+        B = 33#random.randint(1, 128)
+        L = 1#random.randint(0, 20)
+        log_E = 1#random.randint(3, 5)
+    
+        use_cache = True
+    
+        pooling_mode = random.choice(
+            [
+                PoolingMode.SUM,
+                PoolingMode.MEAN,
+            ]
+            + ([PoolingMode.NONE] if not use_experimental_tbe else [])
+        )
+        output_dtype = random.choice(
+            [
+                SparseType.FP32,
+                SparseType.FP16,
+                SparseType.BF16,
+            ]
+        )
+        if pooling_mode == PoolingMode.NONE:
+            mixed = False
+            mixed_B = False
+        else:
+            mixed = random.choice([True, False])
+            mixed_B = (
+                random.choice([True, False]) if not use_experimental_tbe else False
+            )
+        if pooling_mode == PoolingMode.SUM:
+            weighted = random.choice([True, False])
+        else:
+            weighted = False
+>       self.execute_forward_(
+            T,
+            D,
+            B,
+            log_E,
+            L,
+            weights_precision,
+            weighted,
+            mixed,
+            mixed_B,
+            use_cache,
+            cache_algorithm,
+            pooling_mode,
+            use_cpu,
+            output_dtype,
+            use_experimental_tbe,
+        )
+
+tbe/training/forward_test.py:722: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <tbe.training.forward_test.ForwardTest testMethod=test_forward_gpu_uvm_cache_fp16>
+T = 2, D = 4, B = 33, log_E = 1, L = 1
+weights_precision = <SparseType.FP16: 'fp16'>, weighted = False, mixed = True
+mixed_B = False, use_cache = True, cache_algorithm = <CacheAlgorithm.LFU: 1>
+pooling_mode = <PoolingMode.MEAN: 1>, use_cpu = False
+output_dtype = <SparseType.FP16: 'fp16'>, use_experimental_tbe = True
+
+    def execute_forward_(  # noqa C901
+        self,
+        T: int,
+        D: int,
+        B: int,
+        log_E: int,
+        L: int,
+        weights_precision: SparseType,
+        weighted: bool,
+        mixed: bool,
+        mixed_B: bool,
+        use_cache: bool,
+        cache_algorithm: CacheAlgorithm,
+        pooling_mode: PoolingMode,
+        use_cpu: bool,
+        output_dtype: SparseType,
+        use_experimental_tbe: bool,
+    ) -> None:
+        # NOTE: cache is not applicable to CPU version.
+        assume(not use_cpu or not use_cache)
+        # NOTE: limit (T * B * L * D) to avoid timeout for CPU version!
+        assume(not use_cpu or T * B * L * D <= 2048)
+        # NOTE: CPU does not support FP16.
+        assume(not (use_cpu and weights_precision == SparseType.FP16))
+    
+        # NOTE: weighted operation can be done only for SUM.
+        assume(pooling_mode == PoolingMode.SUM or not weighted)
+        # NOTE: No bag ops only work on GPUs, no mixed
+        assume(not use_cpu or pooling_mode != PoolingMode.NONE)
+        assume(not mixed or pooling_mode != PoolingMode.NONE)
+        # TODO: Support these cases
+        assume(
+            not mixed_B
+            or (
+                weights_precision != SparseType.INT8
+                and output_dtype != SparseType.INT8
+                and pooling_mode != PoolingMode.NONE
+            )
+        )
+    
+        emb_op = SplitTableBatchedEmbeddingBagsCodegen
+        if pooling_mode == PoolingMode.SUM:
+            mode = "sum"
+            do_pooling = True
+        elif pooling_mode == PoolingMode.MEAN:
+            mode = "mean"
+            do_pooling = True
+        elif pooling_mode == PoolingMode.NONE:
+            mode = "sum"
+            do_pooling = False
+        else:
+            # This proves that we have exhaustively checked all PoolingModes
+            raise RuntimeError("Unknown PoolingMode!")
+    
+        E = int(10**log_E)
+        if use_cpu:
+            D = (D + 15) // 16 * 4
+        else:
+            D = D
+        if not mixed:
+            Ds = [D] * T
+            Es = [E] * T
+        else:
+            Ds = [
+                round_up(np.random.randint(low=int(0.25 * D), high=int(1.0 * D)), 4)
+                for _ in range(T)
+            ]
+            Es = [
+                np.random.randint(low=int(0.5 * E), high=int(2.0 * E)) for _ in range(T)
+            ]
+    
+        if not mixed_B:
+            Bs = [B] * T
+            Bs_rank_feature = [[0]]
+        else:
+            Bs_rank_feature, Bs = gen_mixed_B_batch_sizes(B, T)
+    
+        compute_device = ComputeDevice.CUDA
+        if use_cpu:
+            managed = [EmbeddingLocation.HOST] * T
+            compute_device = ComputeDevice.CPU
+        elif TEST_WITH_ROCM:
+            # ROCm managed memory allocation is under development
+            managed = [EmbeddingLocation.DEVICE] * T
+        elif use_cache:
+            managed = [EmbeddingLocation.MANAGED_CACHING] * T
+            if mixed:
+                average_D = sum(Ds) // T
+                for t, d in enumerate(Ds):
+                    managed[t] = (
+                        EmbeddingLocation.DEVICE if d < average_D else managed[t]
+                    )
+        else:
+            managed = [
+                np.random.choice(
+                    [
+                        EmbeddingLocation.DEVICE,
+                        # EmbeddingLocation.MANAGED,
+                    ]
+                )
+                for _ in range(T)
+            ]
+        if do_pooling:
+            bs = [
+                to_device(torch.nn.EmbeddingBag(E, D, mode=mode, sparse=True), use_cpu)
+                for (E, D) in zip(Es, Ds)
+            ]
+        else:
+            bs = [
+                to_device(torch.nn.Embedding(E, D, sparse=True), use_cpu)
+                for (E, D) in zip(Es, Ds)
+            ]
+        if weights_precision == SparseType.INT8:
+            for t in range(T):
+                bs[t].weight.data.copy_(
+                    torch.ops.fbgemm.Fused8BitRowwiseQuantizedToFloat(
+                        torch.ops.fbgemm.FloatToFused8BitRowwiseQuantized(
+                            bs[t].weight.data
+                        )
+                    )
+                )
+    
+        if weights_precision == SparseType.FP16:
+            bs = [b.half() for b in bs]
+    
+        # Generate indices
+        xs = [
+            to_device(torch.randint(low=0, high=e, size=(b, L)), use_cpu)
+            for e, b in zip(Es, Bs)
+        ]
+        # Generate positional weights
+        xws = [to_device(torch.randn(size=(b, L)), use_cpu) for b in Bs]
+        if weights_precision == SparseType.FP16:
+            xws = [xw.half() for xw in xws]
+    
+        # Run baseline
+        fs = (
+            [
+                b_indices(b, x, use_cpu=use_cpu, do_pooling=do_pooling)
+                for (b, x) in zip(bs, xs)
+            ]
+            if not weighted
+            else [
+                b_indices(
+                    b,
+                    x,
+                    per_sample_weights=xw.view(-1),
+                    use_cpu=use_cpu,
+                    do_pooling=do_pooling,
+                )
+                for (b, x, xw) in zip(bs, xs, xws)
+            ]
+        )
+    
+        if do_pooling:
+            if mixed_B:
+                f = format_ref_tensors_in_mixed_B_layout(fs, Bs_rank_feature)
+            else:
+                f = torch.cat([f.view(B, -1) for f in fs], dim=1)
+        else:
+            f = torch.cat(fs, dim=0).view(-1, D)
+    
+        # Create a TBE op
+        cc = emb_op(
+            embedding_specs=[
+                (
+                    E,
+                    D,
+                    EmbeddingLocation(M),
+                    compute_device,
+                )
+                for (E, D, M) in zip(Es, Ds, managed)
+            ],
+            weights_precision=weights_precision,
+            optimizer=(
+                OptimType.EXACT_ROWWISE_ADAGRAD if mixed_B else OptimType.EXACT_SGD
+            ),
+            learning_rate=0.05,
+            cache_algorithm=cache_algorithm,
+            pooling_mode=pooling_mode,
+            output_dtype=output_dtype,
+            use_experimental_tbe=use_experimental_tbe,
+        )
+    
+        if not use_cpu and torch.cuda.is_available():
+            # NOTE: Test TorchScript-compatible!
+            try:
+                # Occasionally, we run into the following error when running
+                # against PyTorch nightly:
+                #
+                # RuntimeError: Can't redefine method:
+                # forward on class: __torch__.fbgemm_gpu.split_table_batched_embeddings_ops_training.___torch_mangle_0.SplitTableBatchedEmbeddingBagsCodegen (of Python compilation unit at: 0x5e74890)
+                cc = torch.jit.script(cc)
+            except Exception as e:
+                print(f"Torch JIT compilation failed: {e}")
+        # print("========================")
+    
+        for t in range(T):
+            cc.split_embedding_weights()[t].data.copy_(
+                bs[t].weight
+                if weights_precision != SparseType.INT8
+                else torch.ops.fbgemm.FloatToFused8BitRowwiseQuantized(bs[t].weight)
+            )
+        print("weights", bs[0].weight, bs[1].weight)
+        x = torch.cat([x.contiguous().flatten() for x in xs], dim=0)
+        xw = torch.cat([xw.contiguous().flatten() for xw in xws], dim=0)
+    
+        (indices, offsets) = get_table_batched_offsets_from_dense(
+            x, L, sum(Bs), use_cpu
+        )
+    
+        batch_size_per_feature_per_rank = Bs_rank_feature if mixed_B else None
+    
+        # Run TBE
+        from rpdTracerControl import rpdTracerControl
+        profile = rpdTracerControl()      #######
+        profile.setPythonTrace(True)
+        prof = torch.autograd.profiler.emit_nvtx(record_shapes=True)
+    
+        profile.start()
+        prof.__enter__()
+    
+        fc2 = (
+            cc(
+                indices,
+                offsets,
+                batch_size_per_feature_per_rank=batch_size_per_feature_per_rank,
+            )
+            if not weighted
+            else cc(
+                indices,
+                offsets,
+                to_device(xw.contiguous().view(-1), use_cpu),
+                batch_size_per_feature_per_rank=batch_size_per_feature_per_rank,
+            )
+        )
+        prof.__exit__(None, None, None)
+        profile.stop()
+    
+        # Compare results: f = baseline, fc2 = TBE
+        tolerance = (
+            1.0e-5
+            if weights_precision == SparseType.FP32 and output_dtype == SparseType.FP32
+            else 8.0e-3
+        )
+        torch.set_printoptions(profile="full")
+        print(f"fbgemm:{fc2}")
+        print(f"pytorch:{f}")
+>       torch.testing.assert_close(
+            fc2.float(), f.float(), atol=tolerance, rtol=tolerance
+        )
+E       AssertionError: Tensor-likes are not close!
+E       
+E       Mismatched elements: 8 / 264 (3.0%)
+E       Greatest absolute difference: 511.91119384765625 at index (32, 0) (up to 0.008 allowed)
+E       Greatest relative difference: 5764.3662109375 at index (32, 0) (up to 0.008 allowed)
+
+tbe/training/forward_test.py:333: AssertionError
 =============================== warnings summary ===============================
-test/tbe/training/forward_test.py::ForwardTest::test_forward_cpu_fp32
-test/tbe/training/forward_test.py::ForwardTest::test_forward_cpu_int8
-  /opt/conda/envs/py_3.10/lib/python3.10/site-packages/hypothesis/control.py:59: HypothesisDeprecationWarning: Using `assume` outside a property-based test is deprecated
-    note_deprecation(
-
-test/tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_fp16
-test/tbe/training/forward_test.py::ForwardTest::test_forward_gpu_no_cache_fp32
 test/tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp16
-test/tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp32
+test/tbe/training/forward_test.py::ForwardTest::test_forward_gpu_uvm_cache_fp16
   /opt/conda/envs/py_3.10/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
     warnings.warn(
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========================== short test summary info ============================
-SKIPPED [1] tbe/training/forward_test.py:402: INT8 support is disabled
-SKIPPED [1] tbe/training/forward_test.py:578: INT8 support is disabled
-=================== 7 passed, 2 skipped, 6 warnings in 5.01s ===================
+======================== 1 failed, 2 warnings in 4.09s =========================
+rocpd_op: 0
+rocpd_api_ops: 0
+rocpd_kernelapi: 0
+rocpd_copyapi: 0
+rocpd_api: 0
+rocpd_string: 0
+rpd_tracer: finalized in 10.422678 ms

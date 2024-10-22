@@ -239,6 +239,8 @@ __noinline__ __device__ void process_all_indices_small_Ls(
 
   // Check the special case where each thread needs to process exactly one input
   // If UVM cache is used, fall back to the generic function
+  // printf("============USE_CACHE_WEIGHTS: %d\n", USE_CACHE_WEIGHTS);
+  
   if (!USE_CACHE_WEIGHTS &&
       ballot_sync(bag_boundary == threadIdx.x + 1) == kFullWarpMask) {
     process_all_indices_no_pooling<index_t, emb_t, emb_vec_t, output_vec_t, STEP>(
@@ -852,8 +854,9 @@ __global__ void split_embedding_codegen_forward_unweighted_v2_kernel(
       INVOKE_PROCESS_ALL_INDICES_HELPER(false, __VA_ARGS__); \
     }
 
+    // printf("is_small_L: %d\n", is_small_L);
     if (is_small_L) {
-      INVOKE_PROCESS_ALL_INDICES(small_Ls, 64, 0xf) // process_all_indices_small_Ls< index_t, emb_t, emb_vec_t, cache_t, cache_vec_t, output_vec_t, false, false && !std::is_same<emb_t, cache_t>::value, NUM_PARAMS * NUM_WARPS, STEP, 0xf, 32 >( smem, L, load_d + (threadIdx.x % 32) < load_D, mean_pooling, params_offset, max_D_cache)
+      INVOKE_PROCESS_ALL_INDICES(small_Ls, kWarpSize, 0xf) // process_all_indices_small_Ls< index_t, emb_t, emb_vec_t, cache_t, cache_vec_t, output_vec_t, false, false && !std::is_same<emb_t, cache_t>::value, NUM_PARAMS * NUM_WARPS, STEP, 0xf, 32 >( smem, L, load_d + (threadIdx.x % 32) < load_D, mean_pooling, params_offset, max_D_cache)
       return;
     }
 
@@ -902,6 +905,7 @@ __global__ void split_embedding_codegen_forward_unweighted_v2_kernel(
     // Tail warp
     // STEP_MASK computation assumes STEP = 4
     
+    printf("load_D - load_d < kWarpSize: %d\n", load_D - load_d < kWarpSize);
     if (load_D - load_d < kWarpSize) {
       const auto tail_warp_size = load_D % kWarpSize;
       if (tail_warp_size <= 8) {

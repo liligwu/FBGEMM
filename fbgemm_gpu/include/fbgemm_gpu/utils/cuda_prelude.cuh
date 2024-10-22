@@ -58,7 +58,7 @@ static constexpr int32_t kMaxBlockYDim = 65535;
 static constexpr int32_t kMaxBlockZDim = 65535;
 
 // Full warp mask
-static constexpr uint32_t kFullWarpMask = 0xff'ff'ff'ff;
+static constexpr uint32_t kFullWarpMask = 0xff'ff'ff'ff'ff'ff'ff'ff;
 
 static constexpr float kQParamEps = 1e-8f;
 

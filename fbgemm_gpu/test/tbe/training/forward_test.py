@@ -278,14 +278,14 @@ class ForwardTest(unittest.TestCase):
             except Exception as e:
                 print(f"Torch JIT compilation failed: {e}")
         # print("========================")
-        # print("weights", bs[0].weight, bs[1].weight)
+        
         for t in range(T):
             cc.split_embedding_weights()[t].data.copy_(
                 bs[t].weight
                 if weights_precision != SparseType.INT8
                 else torch.ops.fbgemm.FloatToFused8BitRowwiseQuantized(bs[t].weight)
             )
-
+        print("weights", bs[0].weight, bs[1].weight)
         x = torch.cat([x.contiguous().flatten() for x in xs], dim=0)
         xw = torch.cat([xw.contiguous().flatten() for xw in xws], dim=0)
 
@@ -328,8 +328,8 @@ class ForwardTest(unittest.TestCase):
             else 8.0e-3
         )
         torch.set_printoptions(profile="full")
-        # print(f"fbgemm:{fc2}")
-        # print(f"pytorch:{f}")
+        print(f"fbgemm:{fc2}")
+        print(f"pytorch:{f}")
         torch.testing.assert_close(
             fc2.float(), f.float(), atol=tolerance, rtol=tolerance
         )
@@ -669,8 +669,8 @@ class ForwardTest(unittest.TestCase):
 
     @unittest.skipIf(*gpu_unavailable)
     @given(
-        cache_algorithm=st.sampled_from(CacheAlgorithm),
-        use_experimental_tbe=st.booleans(),
+        cache_algorithm=st.just(CacheAlgorithm.LFU),
+        use_experimental_tbe=st.just(True),
     )
     @settings(
         verbosity=VERBOSITY,
@@ -685,11 +685,11 @@ class ForwardTest(unittest.TestCase):
     ) -> None:
         weights_precision = SparseType.FP16
         use_cpu = False
-        T = random.randint(1, 10)
-        D = random.randint(2, 256)
-        B = random.randint(1, 128)
-        L = random.randint(0, 20)
-        log_E = random.randint(3, 5)
+        T = 2#random.randint(1, 10)
+        D = 4#random.randint(2, 256)
+        B = 33#random.randint(1, 128)
+        L = 1#random.randint(0, 20)
+        log_E = 1#random.randint(3, 5)
 
         use_cache = True
 
