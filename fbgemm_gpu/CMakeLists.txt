@@ -179,14 +179,14 @@ macro(RUN_GEN_SCRIPT SCRIPT)
     COMMAND "${PYTHON_EXECUTABLE}" ${SCRIPT} "--opensource" ${rocm_flag})
 endmacro()
 
-foreach(script
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_backward_split.py"
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_embedding_optimizer.py"
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_forward_quantized.py"
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_forward_split.py"
-    "${CMAKE_CODEGEN_DIR}/genscript/generate_index_select.py")
-    RUN_GEN_SCRIPT(${script})
-endforeach()
+#foreach(script
+#    "${CMAKE_CODEGEN_DIR}/genscript/generate_backward_split.py"
+#    "${CMAKE_CODEGEN_DIR}/genscript/generate_embedding_optimizer.py"
+#    "${CMAKE_CODEGEN_DIR}/genscript/generate_forward_quantized.py"
+#    "${CMAKE_CODEGEN_DIR}/genscript/generate_forward_split.py"
+#    "${CMAKE_CODEGEN_DIR}/genscript/generate_index_select.py")
+#    RUN_GEN_SCRIPT(${script})
+#endforeach()
 
 
 ################################################################################
@@ -207,11 +207,11 @@ if(FBGEMM_BUILD_VARIANT STREQUAL BUILD_VARIANT_ROCM)
   # Note that .H sources are not automatically HIPified, so if they reference
   # CUDA-specific code, e.g. `#include <c10/cuda/CUDAStream.h>`, they will need
   # to be updated with `#ifdef USE_ROCM` guards.
-  hipify(
-    CUDA_SOURCE_DIR
-      ${PROJECT_SOURCE_DIR}
-    HEADER_INCLUDE_DIR
-      ${include_dirs_for_hipification})
+  # hipify(
+  #   CUDA_SOURCE_DIR
+  #     ${PROJECT_SOURCE_DIR}
+  #   HEADER_INCLUDE_DIR
+  #     ${include_dirs_for_hipification})
 
   BLOCK_PRINT(
     "HIPify Sources"
